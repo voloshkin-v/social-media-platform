@@ -3,8 +3,8 @@ import Menu from './Menu';
 
 const Header = () => {
 	return (
-		<header className="py-5">
-			<div className="container flex items-center justify-between lg:px-10">
+		<header className="border-b py-5">
+			<div className="container flex items-center justify-between">
 				<Logo />
 				<Menu />
 			</div>

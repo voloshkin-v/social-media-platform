@@ -1,10 +1,10 @@
 import { createContext, useContext, useState } from 'react';
 import * as authService from '@/services/auth';
-import { LoginValues, RegisterValues } from '../schemas';
-import { IUserContext } from '@/types';
+import { LoginValues, RegisterValues } from '../features/auth/schemas';
+import { IUserAuth } from '@/types';
 import { useNavigate } from 'react-router-dom';
 
-const initialUser: IUserContext = {
+const initialUser: IUserAuth = {
 	_id: '',
 	isActivated: false,
 	username: '',
@@ -12,9 +12,9 @@ const initialUser: IUserContext = {
 
 interface IAuthContext {
 	isAuth: boolean;
-	user: IUserContext;
-	login: (values: LoginValues) => Promise<IUserContext>;
-	register: (values: RegisterValues) => Promise<IUserContext>;
+	user: IUserAuth;
+	login: (values: LoginValues) => Promise<IUserAuth>;
+	register: (values: RegisterValues) => Promise<IUserAuth>;
 	logout: () => void;
 }
 
@@ -22,7 +22,7 @@ export const AuthContext = createContext<IAuthContext | null>(null);
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const navigate = useNavigate();
-	const [user, setUser] = useState<IUserContext>(() => {
+	const [user, setUser] = useState<IUserAuth>(() => {
 		const _user = localStorage.getItem('userData');
 		if (_user) {
 			return JSON.parse(_user);
@@ -31,7 +31,6 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 		return initialUser;
 	});
 	const isAuth = !!user._id;
-	// const [isAuth, setIsAuth] = useState(false);
 
 	const login = async (data: LoginValues) => {
 		const { user } = await authService.login(data);

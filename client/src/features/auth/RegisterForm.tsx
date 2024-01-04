@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterValues, registerSchema } from './schemas';
 import { useToast } from '@/components/ui/use-toast';
-import { useAuth } from './context/AuthProvider';
+import { useAuth } from '../../context/AuthProvider';
 import { AxiosError } from 'axios';
 import { Loader2 } from 'lucide-react';
 

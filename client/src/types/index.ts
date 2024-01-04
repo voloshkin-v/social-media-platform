@@ -35,7 +35,7 @@ export interface IUser {
 
 // MAIN NEW
 
-export interface IUserContext {
+export interface IUserAuth {
 	_id: string;
 	username: string;
 	isActivated: boolean;
@@ -43,5 +43,5 @@ export interface IUserContext {
 
 // axios responses
 export interface AuthResponse {
-	user: IUserContext;
+	user: IUserAuth;
 }

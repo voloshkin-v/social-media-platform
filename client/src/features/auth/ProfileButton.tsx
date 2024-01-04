@@ -1,6 +1,6 @@
 import { Pencil, User, CircleUser, LogOut } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { useAuth } from './context/AuthProvider';
+import { useAuth } from '../../context/AuthProvider';
 import { useToast } from '@/components/ui/use-toast';
 
 import {
@@ -19,15 +19,16 @@ const ProfileButton = () => {
 	const { user, logout } = useAuth();
 
 	const handleLogout = async () => {
-		try {
-			await logout();
-		} catch (err) {
-			toast({
-				variant: 'destructive',
-				title: 'Uh oh! Something went wrong.',
-				description: 'There was a problem with your request.',
-			});
-		}
+		console.log('logout...');
+		// try {
+		// 	await logout();
+		// } catch (err) {
+		// 	toast({
+		// 		variant: 'destructive',
+		// 		title: 'Uh oh! Something went wrong.',
+		// 		description: 'There was a problem with your request.',
+		// 	});
+		// }
 	};
 
 	return (
@@ -39,7 +40,7 @@ const ProfileButton = () => {
 			</DropdownMenuTrigger>
 
 			<DropdownMenuContent className="w-56" align="end">
-				<DropdownMenuLabel>{user.username}</DropdownMenuLabel>
+				<DropdownMenuLabel>username</DropdownMenuLabel>
 
 				<DropdownMenuSeparator />
 

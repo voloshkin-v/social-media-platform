@@ -7,7 +7,7 @@ const AppLayout = () => {
 		<>
 			<Header />
 
-			<main className="container flex flex-col gap-10 pt-10 lg:px-10">
+			<main className="container flex flex-col gap-10 py-10">
 				<Outlet />
 			</main>
 		</>

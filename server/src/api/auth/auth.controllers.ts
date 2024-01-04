@@ -23,10 +23,12 @@ const createSendTokens = (user: IUser, statusCode: number, res: Response) => {
 
 	res.status(statusCode).json({
 		token: tokens.accessToken,
-		user: {
-			_id: user._id,
-			username: user.username,
-			isActivated: user.isActivated,
+		data: {
+			user: {
+				_id: user._id,
+				username: user.username,
+				isActivated: user.isActivated,
+			},
 		},
 	});
 };

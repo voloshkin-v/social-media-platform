@@ -4,8 +4,7 @@ import { Link } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { useToast } from '@/components/ui/use-toast';
 import { LoginValues, loginSchema } from './schemas';
-import { Loader2 } from 'lucide-react';
-import { useAuth } from './context/AuthProvider';
+import { useAuth } from '../../context/AuthProvider';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -17,6 +16,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import AuthLinks from './AuthLink';
+import FormSubmitButton from './FormSubmitButton';
 
 const SignUpForm = () => {
 	const form = useForm<LoginValues>({
@@ -52,80 +52,64 @@ const SignUpForm = () => {
 	};
 
 	return (
-		<>
-			<Form {...form}>
-				<form
-					onSubmit={form.handleSubmit(onSubmit)}
-					className="space-y-6"
-				>
-					<h1 className="text-center">Login</h1>
+		<Form {...form}>
+			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+				<h1 className="text-center">Login</h1>
 
-					<FormField
-						control={form.control}
-						name="email"
-						render={({ field }) => (
-							<FormItem>
-								<FormControl>
-									<Input
-										type="email"
-										placeholder="Email"
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
+				<FormField
+					control={form.control}
+					name="email"
+					render={({ field }) => (
+						<FormItem>
+							<FormControl>
+								<Input
+									type="email"
+									placeholder="Email"
+									{...field}
+								/>
+							</FormControl>
+							<FormMessage />
+						</FormItem>
+					)}
+				/>
 
-					<FormField
-						control={form.control}
-						name="password"
-						render={({ field }) => (
-							<FormItem>
-								<FormControl>
-									<Input
-										type="password"
-										placeholder="Password"
-										{...field}
-									/>
-								</FormControl>
+				<FormField
+					control={form.control}
+					name="password"
+					render={({ field }) => (
+						<FormItem>
+							<FormControl>
+								<Input
+									type="password"
+									placeholder="Password"
+									{...field}
+								/>
+							</FormControl>
 
-								<FormMessage />
+							<FormMessage />
 
-								<Button
-									asChild
-									variant="link"
-									className="!mt-5 ml-auto flex w-fit justify-end text-[10px] underline sm:!mt-2"
-								>
-									<Link to="/forgot">Forgot password?</Link>
-								</Button>
-							</FormItem>
-						)}
-					/>
+							<Button
+								asChild
+								variant="link"
+								className="!mt-5 ml-auto flex w-fit justify-end text-[10px] underline sm:!mt-2"
+							>
+								<Link to="/forgot">Forgot password?</Link>
+							</Button>
+						</FormItem>
+					)}
+				/>
 
-					<Button
-						className="w-full"
-						type="submit"
-						disabled={isSubmitting}
-					>
-						{isSubmitting ? (
-							<>
-								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-								Loading...
-							</>
-						) : (
-							<span>Login</span>
-						)}
-					</Button>
+				<FormSubmitButton isSubmitting={isSubmitting}>
+					Login
+				</FormSubmitButton>
 
-					<AuthLinks
-						title="Not registered yet?"
-						to="/register"
-						linkTitle="Register"
-					/>
-				</form>
-			</Form>
-		</>
+				<AuthLinks
+					title="Not registered yet?"
+					to="/register"
+					linkTitle="Register"
+				/>
+			</form>
+		</Form>
 	);
 };
 

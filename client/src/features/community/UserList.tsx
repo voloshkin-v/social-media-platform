@@ -1,34 +1,37 @@
-import { useQuery } from '@tanstack/react-query';
-import { getUsers } from '@/services/users';
 import User from './User';
-import { useAuth } from '../auth/context/AuthProvider';
+
+const users = [
+	{
+		_id: '1',
+		username: 'Vitalii Voloshyn',
+		isActivated: false,
+		profilePicture: 'https://github.com/shadcn.png',
+		description: 'I want to become fluent in English',
+		birthdate: new Date(),
+		country: 'UA',
+		gender: 'Male',
+		interests: ['Sport', 'Music', 'Dance'],
+		nativaLanguages: ['ua'],
+		studyLanguages: [{ language: 'En', level: 1 }],
+	},
+	{
+		_id: '2',
+		username: 'Mark Jonas',
+		isActivated: false,
+		profilePicture: 'https://github.com/shadcn.png',
+		description: 'Hello friends, lets talk',
+		birthdate: new Date(),
+		country: 'UA',
+		gender: 'Male',
+		interests: ['It', 'Math'],
+		nativaLanguages: ['en'],
+		studyLanguages: [{ language: 'en', level: 3 }],
+	},
+];
 
 const UserList = () => {
-	console.log('user list');
-	const { user } = useAuth();
-	return user.username;
-
-	const {
-		data: users,
-		isPending,
-		isError,
-		error,
-	} = useQuery({
-		queryKey: ['users'],
-		queryFn: getUsers,
-	});
-
-	if (isPending) {
-		return <p>Loading...</p>;
-	}
-
-	if (isError) {
-		console.log(error);
-		return <p>Error!</p>;
-	}
-
 	return (
-		<ul className="grid grid-cols-3 gap-10">
+		<ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
 			{users.map((user) => (
 				<User key={user._id} user={user} />
 			))}
