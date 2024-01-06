@@ -42,7 +42,7 @@ const RegisterForm = () => {
 			} = await register(values);
 
 			localStorage.setItem('token', token);
-			setAuthState(user, true);
+			setAuthState({ user, isAuth: true });
 
 			navigate('/');
 		} catch (err) {

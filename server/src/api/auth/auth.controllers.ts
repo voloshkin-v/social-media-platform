@@ -57,7 +57,7 @@ export const register = async (
 		const isUserExist = await User.findOne({ email });
 		if (isUserExist) {
 			return next(
-				new AppError('A user with this email already exists', 400)
+				new AppError('The user with this email already exists', 400)
 			);
 		}
 
@@ -73,7 +73,6 @@ export const register = async (
 
 		createSendTokens(user, 201, res, next);
 	} catch (err) {
-		console.log(err);
 		next(err);
 	}
 };
@@ -108,7 +107,7 @@ export const logout = async (
 ) => {
 	try {
 		const { refreshToken } = req.cookies;
-		tokenService.deleteToken(refreshToken);
+		await tokenService.deleteToken(refreshToken);
 
 		res.clearCookie('refreshToken');
 		res.status(200).json({
@@ -125,6 +124,8 @@ export const refresh = async (
 	next: NextFunction
 ) => {
 	try {
+		console.log('REFRESH CALLS!!!!!!!!!!!!!!!!!!!!');
+
 		const { refreshToken } = req.cookies;
 
 		if (!refreshToken) {
@@ -136,12 +137,15 @@ export const refresh = async (
 			process.env.REFRESH_TOKEN_SECRET!
 		) as RefreshToken;
 
-		console.log('!!!!!!!!!!REFRESH!!!!!!!!!!!!!!!!!!', refreshToken);
 		const tokenFromDb = await tokenService.findToken(refreshToken);
-		console.log('!!!!!!!!!!TOKEN_FROM_DB!!!!!!!!!!!!!!', tokenFromDb);
 
 		if (!tokenFromDb) {
-			return next(new AppError('Token not found. Access denied', 401));
+			return next(
+				new AppError(
+					'This token does not belong to you. Access denied',
+					401
+				)
+			);
 		}
 
 		const user = await User.findById(userData.userId);

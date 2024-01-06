@@ -1,5 +1,4 @@
 import EditProfileForm from '@/features/profile/EditProfileForm';
-import React from 'react';
 
 const Edit = () => {
 	return (

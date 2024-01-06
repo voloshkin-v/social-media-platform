@@ -1,6 +1,8 @@
-import { apiAxios } from '@/lib/axios';
-import { UsersResponse } from '@/types';
+import { axios } from '@/lib/axios';
+import { UsersResponse } from '@/types/responses';
 
 export const getUsers = async () => {
-	return apiAxios.get<UsersResponse>('/users').then((res) => res.data.users);
+	return axios
+		.get<UsersResponse>('/users')
+		.then((res) => res.data.data.users);
 };

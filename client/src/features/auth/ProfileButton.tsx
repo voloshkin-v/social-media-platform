@@ -26,7 +26,7 @@ const ProfileButton = () => {
 		try {
 			await logout();
 			localStorage.removeItem('token');
-			setAuthState(initialUser, false);
+			setAuthState({ user: initialUser, isAuth: false });
 
 			navigate('/login');
 		} catch (err) {

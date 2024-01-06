@@ -1,7 +1,6 @@
 import { IUserAuth, IUser } from './user';
 
-type Status = 'success' | 'error';
-
+type Status = 'success' | 'error' | 'fail';
 export interface UsersResponse {
 	status: Status;
 	data: {

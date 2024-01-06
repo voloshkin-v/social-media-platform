@@ -16,10 +16,6 @@ const Menu = () => {
 				</li>
 
 				<li>
-					<Link to="/login">Login</Link>
-				</li>
-
-				<li>
 					<MessagingButton />
 				</li>
 

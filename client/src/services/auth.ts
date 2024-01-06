@@ -1,7 +1,5 @@
 import { AuthResponse } from '@/types/responses';
-import { axios } from '@/lib/axios';
-import axiosDefault from 'axios';
-import { baseURL } from '@/lib/axios';
+import { axios, axiosDefault } from '@/lib/axios';
 
 export const login = (data: { email: string; password: string }) => {
 	return axios
@@ -26,8 +24,6 @@ export const logout = () => {
 
 export const refresh = () => {
 	return axiosDefault
-		.get<AuthResponse>(`${baseURL}/auth/refresh`, {
-			withCredentials: true,
-		})
+		.get<AuthResponse>('/auth/refresh')
 		.then((res) => res.data);
 };

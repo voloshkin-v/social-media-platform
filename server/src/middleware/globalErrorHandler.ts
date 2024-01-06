@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
 import AppError from '../utils/appError';
 import { Error } from 'mongoose';
+import { JsonWebTokenError } from 'jsonwebtoken';
 
 export const notFound = (req: Request, res: Response, next: NextFunction) => {
 	next(new AppError(`Not found: ${req.originalUrl}`, 404));
@@ -34,6 +35,22 @@ export const errorHandler = (
 			status: err.status,
 			message: err.message,
 		});
+	}
+
+	if (err instanceof JsonWebTokenError) {
+		if (err.name === 'TokenExpiredError') {
+			return res.status(401).json({
+				status: 'fail',
+				message: 'Your token has expired! Please log in again.',
+			});
+		}
+
+		if (err.name === 'JsonWebTokenError') {
+			return res.status(401).json({
+				status: 'fail',
+				message: 'Invalid token. Please log in again!',
+			});
+		}
 	}
 
 	res.status(500).json({
