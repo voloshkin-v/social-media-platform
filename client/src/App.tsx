@@ -32,7 +32,7 @@ const App = () => {
 						/>
 						<Route path="/community" element={<Community />} />
 						<Route path="/messaging" element={<Messaging />} />
-						<Route path="/profile" element={<Profile />} />
+						<Route path="/profile/:id" element={<Profile />} />
 						<Route path="/profile/edit" element={<Edit />} />
 					</Route>
 				</Route>

@@ -53,7 +53,7 @@ const ProfileButton = () => {
 
 				<DropdownMenuGroup>
 					<DropdownMenuItem asChild>
-						<Link to="/profile">
+						<Link to={`/profile/${user._id}`}>
 							<User className="mr-2 h-4 w-4" />
 							<span>Profile</span>
 						</Link>

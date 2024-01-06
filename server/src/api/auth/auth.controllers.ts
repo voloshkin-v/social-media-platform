@@ -26,8 +26,7 @@ const createSendTokens = async (
 
 		res.cookie('refreshToken', tokens.refreshToken, {
 			httpOnly: true,
-			maxAge:
-				+process.env.REFRESH_COOKIE_EXPIRES_IN! * 24 * 60 * 60 * 1000,
+			maxAge: 20000, // 20sec,
 		});
 
 		res.status(statusCode).json({

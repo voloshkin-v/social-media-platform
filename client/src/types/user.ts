@@ -4,9 +4,6 @@ export interface IUserAuth {
 	isActivated: boolean;
 }
 
-export interface IUser {
-	_id: string;
-	username: string;
-	isActivated: boolean;
+export interface IUser extends IUserAuth {
 	// Others
 }
