@@ -4,7 +4,6 @@ const tokenSchema = new mongoose.Schema({
 	id: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'User',
-		required: true,
 	},
 	refreshToken: {
 		type: String,

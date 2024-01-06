@@ -2,11 +2,11 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { RegisterValues, registerSchema } from './schemas';
 import { useToast } from '@/components/ui/use-toast';
-import { useAuth } from '../../context/AuthProvider';
 import { AxiosError } from 'axios';
-import { Loader2 } from 'lucide-react';
+import { useAuth } from '@/context/AuthProvider';
+import { useNavigate } from 'react-router-dom';
+import { register } from '@/services/auth';
 
-import { Button } from '@/components/ui/button';
 import {
 	Form,
 	FormControl,
@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import AuthLink from './AuthLink';
+import FormSubmitButton from './FormSubmitButton';
 
 const RegisterForm = () => {
 	const form = useForm<RegisterValues>({
@@ -28,13 +29,22 @@ const RegisterForm = () => {
 		},
 	});
 
+	const navigate = useNavigate();
 	const { toast } = useToast();
-	const { register } = useAuth();
+	const { setAuthState } = useAuth();
 	const { isSubmitting } = form.formState;
 
 	const onSubmit = async (values: RegisterValues) => {
 		try {
-			await register(values);
+			const {
+				token,
+				data: { user },
+			} = await register(values);
+
+			localStorage.setItem('token', token);
+			setAuthState(user, true);
+
+			navigate('/');
 		} catch (err) {
 			console.log(err);
 
@@ -94,7 +104,11 @@ const RegisterForm = () => {
 						render={({ field }) => (
 							<FormItem>
 								<FormControl>
-									<Input placeholder="Password" {...field} />
+									<Input
+										type="password"
+										placeholder="Password"
+										{...field}
+									/>
 								</FormControl>
 								<FormMessage />
 							</FormItem>
@@ -108,6 +122,7 @@ const RegisterForm = () => {
 							<FormItem>
 								<FormControl>
 									<Input
+										type="password"
 										placeholder="Confirm password"
 										{...field}
 									/>
@@ -117,20 +132,9 @@ const RegisterForm = () => {
 						)}
 					/>
 
-					<Button
-						className="w-full"
-						type="submit"
-						disabled={isSubmitting}
-					>
-						{isSubmitting ? (
-							<>
-								<Loader2 className="mr-2 h-4 w-4 animate-spin" />
-								Loading...
-							</>
-						) : (
-							<span>Create an account</span>
-						)}
-					</Button>
+					<FormSubmitButton isSubmitting={isSubmitting}>
+						Create an account
+					</FormSubmitButton>
 
 					<AuthLink
 						title="Already have an accout?"

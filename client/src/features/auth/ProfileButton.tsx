@@ -1,7 +1,9 @@
 import { Pencil, User, CircleUser, LogOut } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthProvider';
 import { useToast } from '@/components/ui/use-toast';
+import { logout } from '@/services/auth';
+import { initialUser } from '../../context/AuthProvider';
 
 import {
 	DropdownMenu,
@@ -15,20 +17,25 @@ import {
 import { Button } from '@/components/ui/button';
 
 const ProfileButton = () => {
+	const { setAuthState } = useAuth();
 	const { toast } = useToast();
-	const { user, logout } = useAuth();
+	const { user } = useAuth();
+	const navigate = useNavigate();
 
 	const handleLogout = async () => {
-		console.log('logout...');
-		// try {
-		// 	await logout();
-		// } catch (err) {
-		// 	toast({
-		// 		variant: 'destructive',
-		// 		title: 'Uh oh! Something went wrong.',
-		// 		description: 'There was a problem with your request.',
-		// 	});
-		// }
+		try {
+			await logout();
+			localStorage.removeItem('token');
+			setAuthState(initialUser, false);
+
+			navigate('/login');
+		} catch (err) {
+			toast({
+				variant: 'destructive',
+				title: 'Uh oh! Something went wrong.',
+				description: 'There was a problem with your request.',
+			});
+		}
 	};
 
 	return (
@@ -40,7 +47,7 @@ const ProfileButton = () => {
 			</DropdownMenuTrigger>
 
 			<DropdownMenuContent className="w-56" align="end">
-				<DropdownMenuLabel>username</DropdownMenuLabel>
+				<DropdownMenuLabel>{user.username}</DropdownMenuLabel>
 
 				<DropdownMenuSeparator />
 

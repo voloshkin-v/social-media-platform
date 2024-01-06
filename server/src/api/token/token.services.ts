@@ -38,14 +38,14 @@ export const saveToken = async ({
 	userId: any;
 	refreshToken: string;
 }) => {
-	const token = await Token.findOneAndUpdate(
-		{ id: userId },
-		{ refreshToken }
-	);
+	const tokenData = await Token.findOne({ id: userId });
 
-	if (!token) {
-		return await Token.create({ id: userId, refreshToken });
+	if (tokenData) {
+		tokenData.refreshToken = refreshToken;
+		return tokenData.save();
 	}
+
+	const token = await Token.create({ id: userId, refreshToken });
 
 	return token;
 };
@@ -57,5 +57,6 @@ export const deleteToken = async (refreshToken: string) => {
 
 export const findToken = async (refreshToken: string) => {
 	const token = await Token.findOne({ refreshToken });
+	console.log('INSIDE findToken FUNCTION!!!!!!!!!!!!!!!!!!!!!!', token);
 	return token;
 };

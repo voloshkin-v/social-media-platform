@@ -1,12 +1,10 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Link } from 'react-router-dom';
 import { AxiosError } from 'axios';
 import { useToast } from '@/components/ui/use-toast';
 import { LoginValues, loginSchema } from './schemas';
-import { useAuth } from '../../context/AuthProvider';
+import { login } from '@/services/auth';
 
-import { Button } from '@/components/ui/button';
 import {
 	Form,
 	FormControl,
@@ -17,26 +15,36 @@ import {
 import { Input } from '@/components/ui/input';
 import AuthLinks from './AuthLink';
 import FormSubmitButton from './FormSubmitButton';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthProvider';
 
 const SignUpForm = () => {
 	const form = useForm<LoginValues>({
 		resolver: zodResolver(loginSchema),
 		defaultValues: {
-			email: 'usr223@aa.aa',
+			email: 'user@aa.aa',
 			password: '123123123',
 		},
 	});
 
+	const { setAuthState } = useAuth();
+	const navigate = useNavigate();
 	const { toast } = useToast();
 	const { isSubmitting } = form.formState;
-	const { login } = useAuth();
 
 	const onSubmit = async (values: LoginValues) => {
 		try {
-			await login(values);
+			const {
+				token,
+				data: { user },
+			} = await login(values);
+
+			localStorage.setItem('token', token);
+			setAuthState(user, true);
+
+			navigate('/');
 		} catch (err) {
 			console.log(err);
-
 			let description = 'There was a problem with your request.';
 
 			if (err instanceof AxiosError) {
@@ -87,14 +95,6 @@ const SignUpForm = () => {
 							</FormControl>
 
 							<FormMessage />
-
-							<Button
-								asChild
-								variant="link"
-								className="!mt-5 ml-auto flex w-fit justify-end text-[10px] underline sm:!mt-2"
-							>
-								<Link to="/forgot">Forgot password?</Link>
-							</Button>
 						</FormItem>
 					)}
 				/>

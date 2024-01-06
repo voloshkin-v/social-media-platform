@@ -1,14 +1,28 @@
-import axios from 'axios';
+import axiosLib from 'axios';
 
-const baseURL = 'http://localhost:3000/api/v1';
+export const baseURL = 'http://localhost:3000/api/v1';
 
-// LOGIN, REGISTER, REFRESH
-export const apiAxios = axios.create({
+export const axios = axiosLib.create({
 	baseURL,
 	withCredentials: true,
 });
 
-// apiAxios.interceptors.request.use((config) => {
-// 	config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
-// 	return config;
-// });
+axios.interceptors.request.use((config) => {
+	config.headers.Authorization = `Bearer ${localStorage.getItem('token')}`;
+	return config;
+});
+
+//
+//
+//
+//
+//
+//
+//
+//
+//
+// Private instance with interceptors
+export const axiosPrivate = axiosLib.create({
+	baseURL,
+	withCredentials: true,
+});

@@ -5,7 +5,7 @@ import cors from 'cors';
 
 import authRouter from './api/auth/auth.router';
 import userRouter from './api/users/user.router';
-import * as middlewares from './middleware';
+import * as middlewares from './middleware/globalErrorHandler';
 
 dotenv.config();
 

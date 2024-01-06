@@ -6,7 +6,12 @@ import { verifyStatus } from '../../middleware/verifyStatus';
 const router = express.Router();
 
 // router.use(verifyToken, verifyStatus);
+
 router.use(verifyToken);
+
 router.route('/').get(userController.getUsers);
+router.route('/:id').get(userController.getUser);
+
+router.patch('/updateMe', userController.updateMe);
 
 export default router;

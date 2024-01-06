@@ -1,6 +1,9 @@
-import User from './User';
+import { useQuery } from '@tanstack/react-query';
+import { UsersResponse } from '@/types/responses';
+import useAxios from '@/hooks/useAxios';
+import { useNavigate } from 'react-router-dom';
 
-const users = [
+const users2 = [
 	{
 		_id: '1',
 		username: 'Vitalii Voloshyn',
@@ -30,11 +33,35 @@ const users = [
 ];
 
 const UserList = () => {
+	// const {
+	// 	data: users,
+	// 	isPending,
+	// 	isError,
+	// } = useQuery({
+	// 	queryKey: ['users'],
+	// 	queryFn: () =>
+	// 		axiosPrivate
+	// 			.get<UsersResponse>('/users')
+	// 			.then((res) => res.data.data.users),
+	// });
+
+	// if (isPending) {
+	// 	return <p>Loading...</p>;
+	// }
+
+	// if (isError) {
+	// 	// navigate('/login');
+	// 	return <p>Error</p>;
+	// }
+
+	return <h1>users</h1>;
+
 	return (
 		<ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-			{users.map((user) => (
+			{JSON.stringify(users, null, 4)}
+			{/* {users.map((user) => (
 				<User key={user._id} user={user} />
-			))}
+			))} */}
 		</ul>
 	);
 };

@@ -1,8 +1,10 @@
-import { apiAxios } from '@/lib/axios';
-import { AuthResponse } from '@/types';
+import { AuthResponse } from '@/types/responses';
+import { axios } from '@/lib/axios';
+import axiosDefault from 'axios';
+import { baseURL } from '@/lib/axios';
 
 export const login = (data: { email: string; password: string }) => {
-	return apiAxios
+	return axios
 		.post<AuthResponse>('/auth/login', data)
 		.then((res) => res.data);
 };
@@ -13,11 +15,19 @@ export const register = (data: {
 	confirmPassword: string;
 	username: string;
 }) => {
-	return apiAxios
+	return axios
 		.post<AuthResponse>('/auth/register', data)
 		.then((res) => res.data);
 };
 
 export const logout = () => {
-	return apiAxios.post('/auth/logout');
+	return axios.post('/auth/logout');
+};
+
+export const refresh = () => {
+	return axiosDefault
+		.get<AuthResponse>(`${baseURL}/auth/refresh`, {
+			withCredentials: true,
+		})
+		.then((res) => res.data);
 };
