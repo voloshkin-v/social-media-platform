@@ -1,9 +1,8 @@
-import { Pencil, User, CircleUser, LogOut } from 'lucide-react';
+import { Pencil, CircleUser, LogOut, User } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../../context/AuthProvider';
 import { useToast } from '@/components/ui/use-toast';
 import { logout } from '@/services/auth';
-import { initialUser } from '../../context/AuthProvider';
+import useCurrentUser from '@/hooks/useCurrentUser';
 
 import {
 	DropdownMenu,
@@ -17,17 +16,13 @@ import {
 import { Button } from '@/components/ui/button';
 
 const ProfileButton = () => {
-	const { setAuthState } = useAuth();
 	const { toast } = useToast();
-	const { user } = useAuth();
 	const navigate = useNavigate();
+	const { user } = useCurrentUser();
 
 	const handleLogout = async () => {
 		try {
 			await logout();
-			localStorage.removeItem('token');
-			setAuthState({ user: initialUser, isAuth: false });
-
 			navigate('/login');
 		} catch (err) {
 			toast({

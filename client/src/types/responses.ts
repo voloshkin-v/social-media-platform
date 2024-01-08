@@ -1,4 +1,4 @@
-import { IUserAuth, IUser } from './user';
+import { IUser } from './user';
 
 type Status = 'success' | 'error' | 'fail';
 export interface UsersResponse {
@@ -8,10 +8,9 @@ export interface UsersResponse {
 	};
 }
 
-export interface AuthResponse {
+export interface UserResponse {
 	status: Status;
-	token: string;
 	data: {
-		user: IUserAuth;
+		user: IUser;
 	};
 }

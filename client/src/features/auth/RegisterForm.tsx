@@ -1,11 +1,11 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { RegisterValues, registerSchema } from './schemas';
+import { z } from 'zod';
 import { useToast } from '@/components/ui/use-toast';
 import { AxiosError } from 'axios';
-import { useAuth } from '@/context/AuthProvider';
 import { useNavigate } from 'react-router-dom';
 import { register } from '@/services/auth';
+import { registerSchema } from '@/lib/schemas';
 
 import {
 	Form,
@@ -17,6 +17,8 @@ import {
 import { Input } from '@/components/ui/input';
 import AuthLink from './AuthLink';
 import FormSubmitButton from './FormSubmitButton';
+
+type RegisterValues = z.infer<typeof registerSchema>;
 
 const RegisterForm = () => {
 	const form = useForm<RegisterValues>({
@@ -31,27 +33,17 @@ const RegisterForm = () => {
 
 	const navigate = useNavigate();
 	const { toast } = useToast();
-	const { setAuthState } = useAuth();
 	const { isSubmitting } = form.formState;
 
 	const onSubmit = async (values: RegisterValues) => {
 		try {
-			const {
-				token,
-				data: { user },
-			} = await register(values);
-
-			localStorage.setItem('token', token);
-			setAuthState({ user, isAuth: true });
-
+			await register(values);
 			navigate('/');
 		} catch (err) {
-			console.log(err);
-
 			let description = 'There was a problem with your request.';
 
 			if (err instanceof AxiosError) {
-				description = 'axios error';
+				description = err.response?.data?.message;
 			}
 
 			toast({

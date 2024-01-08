@@ -5,5 +5,10 @@ export interface IUserAuth {
 }
 
 export interface IUser extends IUserAuth {
-	// Others
+	profilePicture?: string;
+	country?: string;
+	gender?: 'Male' | 'Female';
+	birthDate?: string;
+	description?: string;
+	interests?: string[];
 }

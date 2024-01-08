@@ -1,15 +1,23 @@
-import { useAuth } from '@/context/AuthProvider';
 import { Navigate } from 'react-router-dom';
+import FullScreenLoader from './FullScreenLoader';
+import useCurrentUser from '@/hooks/useCurrentUser';
+
 interface ProtectedRouteProps {
 	children: React.ReactNode;
 }
 
 const ProtectedRoute = ({ children }: ProtectedRouteProps) => {
-	const { isAuth } = useAuth();
+	const { user, isLoading, isError } = useCurrentUser();
 
-	// if (!isAuth) return <Navigate to="/login" />;
+	if (isLoading) {
+		return <FullScreenLoader />;
+	}
 
-	return children;
+	if (isError) {
+		return <Navigate to="/login" />;
+	}
+
+	if (user) return children;
 };
 
 export default ProtectedRoute;

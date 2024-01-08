@@ -26,19 +26,17 @@ const createSendTokens = async (
 
 		res.cookie('refreshToken', tokens.refreshToken, {
 			httpOnly: true,
-			maxAge: 20000, // 20sec,
+			maxAge: 7 * 24 * 60 * 60 * 1000, // 7d,
+		});
+
+		res.cookie('accessToken', tokens.accessToken, {
+			httpOnly: true,
+			maxAge: 60 * 60 * 1000, // 1h
+			// maxAge: 15 * 60 * 1000, // 15m
 		});
 
 		res.status(statusCode).json({
 			status: 'success',
-			token: tokens.accessToken,
-			data: {
-				user: {
-					_id: user._id,
-					username: user.username,
-					isActivated: user.isActivated,
-				},
-			},
 		});
 	} catch (e) {
 		next(e);
@@ -109,6 +107,8 @@ export const logout = async (
 		await tokenService.deleteToken(refreshToken);
 
 		res.clearCookie('refreshToken');
+		res.clearCookie('accessToken');
+
 		res.status(200).json({
 			status: 'success',
 		});
@@ -123,8 +123,6 @@ export const refresh = async (
 	next: NextFunction
 ) => {
 	try {
-		console.log('REFRESH CALLS!!!!!!!!!!!!!!!!!!!!');
-
 		const { refreshToken } = req.cookies;
 
 		if (!refreshToken) {

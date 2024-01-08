@@ -12,7 +12,11 @@ const AuthLink = ({ title, linkTitle, to }: AuthLinkProps) => {
 		<div className="flex flex-wrap items-center gap-1 text-[12px]">
 			<span>{title}</span>
 
-			<Button className="text-[12px] underline" variant="link" asChild>
+			<Button
+				className="text-[12px] underline hover:no-underline"
+				variant="link"
+				asChild
+			>
 				<Link to={to}>{linkTitle}</Link>
 			</Button>
 		</div>

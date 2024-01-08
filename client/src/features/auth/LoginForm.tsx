@@ -2,8 +2,9 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { AxiosError } from 'axios';
 import { useToast } from '@/components/ui/use-toast';
-import { LoginValues, loginSchema } from './schemas';
 import { login } from '@/services/auth';
+import { loginSchema } from '@/lib/schemas';
+import { z } from 'zod';
 
 import {
 	Form,
@@ -16,7 +17,8 @@ import { Input } from '@/components/ui/input';
 import AuthLinks from './AuthLink';
 import FormSubmitButton from './FormSubmitButton';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '@/context/AuthProvider';
+
+type LoginValues = z.infer<typeof loginSchema>;
 
 const SignUpForm = () => {
 	const form = useForm<LoginValues>({
@@ -27,28 +29,19 @@ const SignUpForm = () => {
 		},
 	});
 
-	const { setAuthState } = useAuth();
 	const navigate = useNavigate();
 	const { toast } = useToast();
 	const { isSubmitting } = form.formState;
 
 	const onSubmit = async (values: LoginValues) => {
 		try {
-			const {
-				token,
-				data: { user },
-			} = await login(values);
-
-			localStorage.setItem('token', token);
-			setAuthState({ user, isAuth: true });
-
+			await login(values);
 			navigate('/');
 		} catch (err) {
-			console.log(err);
 			let description = 'There was a problem with your request.';
 
 			if (err instanceof AxiosError) {
-				description = 'axios error';
+				description = err.response?.data?.message;
 			}
 
 			toast({
