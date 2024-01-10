@@ -1,37 +1,47 @@
+import { calculateUserAge, getLevel } from '@/lib/utils';
+import { IUser } from '@/types/user';
+import { Link } from 'react-router-dom';
+
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarImage } from '@/components/ui/avatar';
+
 interface UserProps {
-	user: {
-		_id: string;
-		username: string;
-		description: string;
-		country: string;
-		profilePicture: string;
-		birthDate: Date;
-		nativaLanguages: string[];
-	};
+	user: IUser;
 }
 
 const User = ({ user }: UserProps) => {
 	return (
-		<li className="flex gap-6 rounded-xl bg-secondary p-6 text-sm">
-			<div>avatar</div>
-			<div className="space-y-1">
-				<div className="flex items-center gap-2">
-					<span className="text-base">{user.username}</span>
-					<span>24</span>
-					<span className={`fi fi-${user.country}`}></span>
-				</div>
+		<li>
+			<Link
+				to={`/profile/${user._id}`}
+				className="flex h-full gap-6 rounded-xl bg-secondary p-4 text-sm transition-transform hover:-translate-y-[2px] md:p-6"
+			>
+				<Avatar className="h-14 w-14">
+					<AvatarImage src={user.profilePicture} alt="profile picture" />
+				</Avatar>
 
-				<p>{user.description}</p>
+				<div className="space-y-3">
+					<div className="flex flex-wrap items-center gap-3">
+						<span className="text-base">{user.username}</span>
+						{user.birthDate && <span>{calculateUserAge(user.birthDate)}</span>}
+						{user.country && <span className={`fi fi-${user.country.toLowerCase()}`}></span>}
+					</div>
 
-				<div>
-					<span>Speaks</span>
-					
-				</div>
+					<p>
+						{user.description && user.description.length > 30
+							? user.description.slice(1, 30) + '...'
+							: user.description}
+					</p>
 
-				<div>
-					<span>Learning</span>
+					<p>Level of english: {user.languageLevel && getLevel(user.languageLevel)}</p>
+
+					<div className="flex flex-wrap gap-1">
+						{user.interests.map((item) => (
+							<Badge key={item}>{item}</Badge>
+						))}
+					</div>
 				</div>
-			</div>
+			</Link>
 		</li>
 	);
 };

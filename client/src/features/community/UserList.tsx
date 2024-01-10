@@ -1,39 +1,51 @@
 import { getUsers } from '@/services/users';
-import { useQuery } from '@tanstack/react-query';
-import { Link } from 'react-router-dom';
+import { useInfiniteQuery } from '@tanstack/react-query';
+import { useInView } from 'react-intersection-observer';
+import { useEffect } from 'react';
+
+import Loader from '@/components/Loader';
+import User from './User';
 
 const UserList = () => {
-	const {
-		data: users,
-		isPending,
-		isError,
-	} = useQuery({
+	const { ref, inView } = useInView();
+	const { data, isPending, isError, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery({
 		queryKey: ['users'],
 		queryFn: getUsers,
+		initialPageParam: 1,
+		getNextPageParam: (lastPage, allPages) => {
+			const morePagesExist = lastPage.length === 9;
+			if (!morePagesExist) return undefined;
+			return allPages.length + 1;
+		},
 	});
 
+	useEffect(() => {
+		if (inView && hasNextPage) {
+			fetchNextPage();
+		}
+	}, [inView, hasNextPage, fetchNextPage]);
+
 	if (isPending) {
-		return <p>PENDING</p>;
+		return <Loader />;
 	}
 
 	if (isError) {
 		return <p>ERROR</p>;
 	}
 
-	console.log(typeof users[0].birthDate);
-
 	return (
-		<ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
-			{users.map((user) => (
-				<li className="border p-2">
-					<h2>
-						{user.username} - {user._id} - {JSON.stringify(user.isActivated)}
-					</h2>
-					<p key={user._id}>{user.description}</p>
-					<Link to={`/profile/${user._id}`}>LINK</Link>
-				</li>
-			))}
-		</ul>
+		<div>
+			<ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+				{data.pages.map((users) => users.map((user) => <User key={user._id} user={user} />))}
+			</ul>
+			<span className="absolute opacity-0" ref={ref}></span>
+
+			{isFetchingNextPage && (
+				<div className="mt-5 flex justify-center">
+					<Loader />
+				</div>
+			)}
+		</div>
 	);
 };
 

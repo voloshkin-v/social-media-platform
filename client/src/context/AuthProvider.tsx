@@ -17,11 +17,7 @@ export const initialUser: IUserAuth = {
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 	const [user, setUser] = useState(initialUser);
 
-	return (
-		<AuthContext.Provider value={{ user, setUser }}>
-			{children}
-		</AuthContext.Provider>
-	);
+	return <AuthContext.Provider value={{ user, setUser }}>{children}</AuthContext.Provider>;
 };
 
 export const useAuth = () => {

@@ -6,11 +6,7 @@ const DarkModeToggle = () => {
 	const { setTheme, theme } = useTheme();
 
 	return (
-		<Button
-			variant="ghost"
-			size="icon"
-			onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-		>
+		<Button variant="ghost" size="icon" onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}>
 			{theme === 'dark' ? <Sun /> : <Moon />}
 		</Button>
 	);

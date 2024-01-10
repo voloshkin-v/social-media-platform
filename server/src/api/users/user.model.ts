@@ -8,49 +8,54 @@ export interface IUser {
 	username: string;
 }
 
-const userSchema = new mongoose.Schema({
-	email: {
-		type: String,
-		required: true,
-		unique: true,
-		lowercase: true,
-		validate: isEmail,
+const userSchema = new mongoose.Schema(
+	{
+		email: {
+			type: String,
+			required: true,
+			unique: true,
+			lowercase: true,
+			validate: isEmail,
+		},
+		password: {
+			type: String,
+			required: true,
+			minLength: 8,
+			select: false,
+		},
+		isActivated: {
+			type: Boolean,
+			default: false,
+		},
+		username: {
+			type: String,
+			required: true,
+			minLength: 6,
+			maxLength: 20,
+			trim: true,
+		},
+		description: {
+			type: String,
+			minLength: 10,
+			maxLength: 260,
+			trim: true,
+		},
+		profilePicture: {
+			type: String,
+			default: 'https://github.com/shadcn.png',
+		},
+		birthDate: Date,
+		gender: {
+			type: String,
+			enum: ['Male', 'Female'],
+		},
+		country: String,
+		interests: [String],
+		nativeLanguage: String,
+		languageLevel: { type: Number, min: 1, max: 6 },
 	},
-	password: {
-		type: String,
-		required: true,
-		minLength: 8,
-		select: false,
-	},
-	isActivated: {
-		type: Boolean,
-		default: false,
-	},
-	username: {
-		type: String,
-		required: true,
-		minLength: 6,
-		maxLength: 20,
-		trim: true,
-	},
-	description: {
-		type: String,
-		minLength: 10,
-		maxLength: 160,
-		trim: true,
-	},
-	profilePicture: {
-		type: String,
-		default: '',
-	},
-	birthDate: Date,
-	gender: {
-		type: String,
-		enum: ['Male', 'Female'],
-	},
-	country: String,
-	interests: [String],
-});
+	{ timestamps: true }
+);
 
 userSchema.pre('save', async function (next) {
 	if (!this.isModified('password')) {

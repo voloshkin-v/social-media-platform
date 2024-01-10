@@ -7,16 +7,13 @@ import { useNavigate } from 'react-router-dom';
 import { register } from '@/services/auth';
 import { registerSchema } from '@/lib/schemas';
 
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormMessage,
-} from '@/components/ui/form';
+import { Form } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import AuthLink from './AuthLink';
 import FormSubmitButton from './FormSubmitButton';
+import InputField from '../forms/InputField';
+// import UsernameField from '../profile/Edit/UsernameField';
+// import InputField from '../profile/Edit/UsernameField';
 
 type RegisterValues = z.infer<typeof registerSchema>;
 
@@ -55,87 +52,19 @@ const RegisterForm = () => {
 	};
 
 	return (
-		<>
-			<Form {...form}>
-				<form
-					onSubmit={form.handleSubmit(onSubmit)}
-					className="space-y-6"
-				>
-					<h1 className="text-center">Register</h1>
+		<Form {...form}>
+			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+				<h1 className="text-center">Register</h1>
 
-					<FormField
-						control={form.control}
-						name="email"
-						render={({ field }) => (
-							<FormItem>
-								<FormControl>
-									<Input placeholder="Email" {...field} />
-								</FormControl>
+				<InputField form={form} name="email" placeholder="Email" type="email" />
+				<InputField form={form} name="username" placeholder="Username" />
+				<InputField form={form} name="password" placeholder="Password" type="password" />
+				<InputField form={form} name="confirmPassword" placeholder="Confirm password" type="password" />
 
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						control={form.control}
-						name="username"
-						render={({ field }) => (
-							<FormItem>
-								<FormControl>
-									<Input placeholder="Username" {...field} />
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						control={form.control}
-						name="password"
-						render={({ field }) => (
-							<FormItem>
-								<FormControl>
-									<Input
-										type="password"
-										placeholder="Password"
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<FormField
-						control={form.control}
-						name="confirmPassword"
-						render={({ field }) => (
-							<FormItem>
-								<FormControl>
-									<Input
-										type="password"
-										placeholder="Confirm password"
-										{...field}
-									/>
-								</FormControl>
-								<FormMessage />
-							</FormItem>
-						)}
-					/>
-
-					<FormSubmitButton isSubmitting={isSubmitting}>
-						Create an account
-					</FormSubmitButton>
-
-					<AuthLink
-						title="Already have an accout?"
-						to="/login"
-						linkTitle="Login"
-					/>
-				</form>
-			</Form>
-		</>
+				<FormSubmitButton isSubmitting={isSubmitting}>Create an account</FormSubmitButton>
+				<AuthLink title="Already have an accout?" to="/login" linkTitle="Login" />
+			</form>
+		</Form>
 	);
 };
 

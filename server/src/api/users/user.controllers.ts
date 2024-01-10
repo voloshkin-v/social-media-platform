@@ -2,19 +2,18 @@ import { Request, Response, NextFunction } from 'express';
 import User from './user.model';
 import AppError from '../../utils/appError';
 
-// AGE min 14 max 70
-
 export const getUsers = async (
 	req: Request,
 	res: Response,
 	next: NextFunction
 ) => {
 	try {
-		const { gender, country, minAge, maxAge } = req.query;
-		// _id: { $ne: req.userId },
-		// isActivated: true,
+		const { gender, country } = req.query;
 
-		const usersQuery = User.find();
+		const usersQuery = User.find({
+			_id: { $ne: req.userId },
+			isActivated: true,
+		}).sort({ createdAt: -1 });
 
 		if (gender) {
 			usersQuery.where('gender').equals(gender);
@@ -23,6 +22,12 @@ export const getUsers = async (
 		if (country) {
 			usersQuery.where('country').equals(country);
 		}
+
+		const page = Number(req.query.page) || 1;
+		const limit = Number(req.query.limit) || 9;
+		const skip = (page - 1) * limit;
+
+		usersQuery.skip(skip).limit(limit);
 
 		const users = await usersQuery;
 
@@ -90,11 +95,12 @@ export const updateCurrentUser = async (
 		const {
 			username,
 			description,
-			profilePicture,
 			gender,
-			country,
 			birthDate,
 			interests,
+			country,
+			nativeLanguage,
+			languageLevel,
 		} = req.body;
 
 		const updatedUser = await User.findByIdAndUpdate(
@@ -102,17 +108,39 @@ export const updateCurrentUser = async (
 			{
 				username,
 				description,
-				profilePicture,
 				gender,
-				country,
 				birthDate,
 				interests,
+				country,
+				nativeLanguage,
+				languageLevel,
 			},
 			{
 				new: true,
 				runValidators: true,
 			}
 		);
+
+		if (!updatedUser) {
+			return next(new AppError('User could not be updated', 400));
+		}
+
+		if (
+			updatedUser.username &&
+			updatedUser.description &&
+			updatedUser.nativeLanguage &&
+			updatedUser.birthDate &&
+			updatedUser.gender &&
+			updatedUser.country &&
+			updatedUser.languageLevel &&
+			updatedUser.interests.length > 0
+		) {
+			updatedUser.isActivated = true;
+			await updatedUser.save();
+		} else {
+			updatedUser.isActivated = false;
+			await updatedUser.save();
+		}
 
 		res.status(200).json({
 			status: 'success',

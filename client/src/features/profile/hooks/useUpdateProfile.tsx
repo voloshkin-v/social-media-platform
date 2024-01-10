@@ -2,11 +2,13 @@ import { useToast } from '@/components/ui/use-toast';
 import { updateCurrentUser } from '@/services/users';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { EditProfileValues } from '../EditProfileForm';
+import { EditProfileValues } from '../Edit/EditProfileForm';
+import { useNavigate } from 'react-router-dom';
 
 const useUpdateProfile = () => {
 	const queryClient = useQueryClient();
 	const { toast } = useToast();
+	const navigate = useNavigate();
 
 	return useMutation({
 		mutationFn: (values: EditProfileValues) => updateCurrentUser(values),
@@ -17,7 +19,7 @@ const useUpdateProfile = () => {
 			});
 
 			toast({
-				title: 'Profile has been successfully updated',
+				title: 'Profile has been successfully updated.',
 				variant: 'default',
 			});
 		},

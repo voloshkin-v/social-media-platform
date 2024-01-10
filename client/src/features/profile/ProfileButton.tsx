@@ -14,15 +14,18 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
+import { useQueryClient } from '@tanstack/react-query';
 
 const ProfileButton = () => {
 	const { toast } = useToast();
 	const navigate = useNavigate();
 	const { user } = useCurrentUser();
+	const queryClient = useQueryClient();
 
 	const handleLogout = async () => {
 		try {
 			await logout();
+			queryClient.removeQueries({ queryKey: ['currentUser'] });
 			navigate('/login');
 		} catch (err) {
 			toast({
@@ -47,10 +50,10 @@ const ProfileButton = () => {
 				<DropdownMenuSeparator />
 
 				<DropdownMenuGroup>
-					<DropdownMenuItem asChild>
-						<Link to={`/profile/${user._id}`}>
+					<DropdownMenuItem asChild disabled={!user.isActivated}>
+						<Link to={`/profile`}>
 							<User className="mr-2 h-4 w-4" />
-							<span>Profile</span>
+							<span>Profile {!user.isActivated && <span className="ml-1 text-xs">not active</span>}</span>
 						</Link>
 					</DropdownMenuItem>
 

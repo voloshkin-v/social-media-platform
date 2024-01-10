@@ -1,14 +1,20 @@
-export interface IUserAuth {
-	_id: string;
-	username: string;
-	isActivated: boolean;
-}
+import type { TCountryCode, TLanguageCode } from 'countries-list';
 
-export interface IUser extends IUserAuth {
-	profilePicture?: string;
-	country?: string;
-	gender?: 'Male' | 'Female';
+export interface IUserAuth {} // ?
+
+type Gender = 'Male' | 'Female';
+
+export interface IUser {
+	_id: string;
+	email: string;
+	isActivated: boolean;
+	username: string;
+	profilePicture: string;
+	interests: string[];
+	languageLevel?: number;
+	nativeLanguage?: TLanguageCode;
+	country?: TCountryCode;
+	gender?: Gender;
 	birthDate?: string;
 	description?: string;
-	interests?: string[];
 }

@@ -6,6 +6,7 @@ import { Community, NotFound, Messaging, Profile, Edit } from '@/pages';
 import ProtectedRoute from './components/ProtectedRoute';
 import LoginForm from './features/auth/LoginForm';
 import RegisterForm from './features/auth/RegisterForm';
+import MyProfile from './pages/Profile/MyProfile';
 
 const App = () => {
 	return (
@@ -23,12 +24,10 @@ const App = () => {
 						</ProtectedRoute>
 					}
 				>
-					<Route
-						index
-						element={<Navigate replace to="/community" />}
-					/>
+					<Route index element={<Navigate replace to="/community" />} />
 					<Route path="/community" element={<Community />} />
 					<Route path="/messaging" element={<Messaging />} />
+					<Route path="/profile" element={<MyProfile />} />
 					<Route path="/profile/:id" element={<Profile />} />
 					<Route path="/profile/edit" element={<Edit />} />
 				</Route>

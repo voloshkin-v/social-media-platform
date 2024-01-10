@@ -4,12 +4,7 @@ export const login = (data: { email: string; password: string }) => {
 	return apiAxios.post('/auth/login', data).then((res) => res.data);
 };
 
-export const register = (data: {
-	email: string;
-	password: string;
-	confirmPassword: string;
-	username: string;
-}) => {
+export const register = (data: { email: string; password: string; confirmPassword: string; username: string }) => {
 	return apiAxios.post('/auth/register', data).then((res) => res.data);
 };
 

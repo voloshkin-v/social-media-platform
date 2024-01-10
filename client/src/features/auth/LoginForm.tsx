@@ -5,18 +5,12 @@ import { useToast } from '@/components/ui/use-toast';
 import { login } from '@/services/auth';
 import { loginSchema } from '@/lib/schemas';
 import { z } from 'zod';
+import { useNavigate } from 'react-router-dom';
 
-import {
-	Form,
-	FormControl,
-	FormField,
-	FormItem,
-	FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
+import { Form } from '@/components/ui/form';
 import AuthLinks from './AuthLink';
 import FormSubmitButton from './FormSubmitButton';
-import { useNavigate } from 'react-router-dom';
+import InputField from '../forms/InputField';
 
 type LoginValues = z.infer<typeof loginSchema>;
 
@@ -57,17 +51,19 @@ const SignUpForm = () => {
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
 				<h1 className="text-center">Login</h1>
 
-				<FormField
+				<InputField form={form} name="email" placeholder="Email" type="email" />
+				<InputField form={form} name="password" placeholder="Password" type="password" />
+
+				<FormSubmitButton isSubmitting={isSubmitting}>Login</FormSubmitButton>
+				<AuthLinks title="Not registered yet?" to="/register" linkTitle="Register" />
+
+				{/* <FormField
 					control={form.control}
 					name="email"
 					render={({ field }) => (
 						<FormItem>
 							<FormControl>
-								<Input
-									type="email"
-									placeholder="Email"
-									{...field}
-								/>
+								<Input type="email" placeholder="Email" {...field} />
 							</FormControl>
 							<FormMessage />
 						</FormItem>
@@ -80,27 +76,13 @@ const SignUpForm = () => {
 					render={({ field }) => (
 						<FormItem>
 							<FormControl>
-								<Input
-									type="password"
-									placeholder="Password"
-									{...field}
-								/>
+								<Input type="password" placeholder="Password" {...field} />
 							</FormControl>
 
 							<FormMessage />
 						</FormItem>
 					)}
-				/>
-
-				<FormSubmitButton isSubmitting={isSubmitting}>
-					Login
-				</FormSubmitButton>
-
-				<AuthLinks
-					title="Not registered yet?"
-					to="/register"
-					linkTitle="Register"
-				/>
+				/> */}
 			</form>
 		</Form>
 	);

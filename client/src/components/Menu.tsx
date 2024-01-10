@@ -9,7 +9,7 @@ import MessagingButton from '@/features/messaging/MessagingButton';
 const Menu = () => {
 	return (
 		<nav>
-			<ul className="flex items-center gap-1 lg:gap-3">
+			<ul className="flex items-center gap-1 md:gap-3">
 				<li>
 					<Button variant="ghost" size="icon" asChild>
 						<Link to="/community">

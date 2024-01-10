@@ -1,5 +1,5 @@
 import { refresh } from '@/services/auth';
-import axios from 'axios';
+import axios, { AxiosError } from 'axios';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
 export const baseURL = 'http://localhost:3000/api/v1';
@@ -20,6 +20,10 @@ const refreshAuth = async () => {
 		await refresh();
 		return Promise.resolve();
 	} catch (err) {
+		if (err instanceof AxiosError && err.response?.status === 401) {
+			window.location.href = '/login';
+		}
+
 		return Promise.reject();
 	}
 };
