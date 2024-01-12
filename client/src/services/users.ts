@@ -63,3 +63,17 @@ export const getCurrentUser = async () => {
 export const updateCurrentUser = async (values: EditProfileValues) => {
 	return apiAxiosPrivate.patch('/users', values).then((res) => res.data);
 };
+
+export const updateProfilePicture = (formData: FormData) => {
+	return apiAxiosPrivate
+		.patch('/users/profilePicture', formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		})
+		.then((res) => res.data);
+};
+
+export const deleteProfilePicture = () => {
+	return apiAxiosPrivate.delete('/users/profilePicture').then((res) => res.data);
+};

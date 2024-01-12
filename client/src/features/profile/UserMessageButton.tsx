@@ -26,7 +26,7 @@ const UserMessageButton = () => {
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
-				<Button className="w-fit">Send message</Button>
+				<Button className="w-full">Send message</Button>
 			</DialogTrigger>
 
 			<DialogContent className="gap-8">

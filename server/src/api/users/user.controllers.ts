@@ -125,7 +125,6 @@ export const updateCurrentUser = async (
 ) => {
 	try {
 		const id = req.userId;
-		console.log(req.file);
 
 		const body: UpdateQuery<IUser> = {
 			username: req.body.username,
@@ -137,10 +136,6 @@ export const updateCurrentUser = async (
 			nativeLanguage: req.body.nativeLanguage,
 			languageLevel: req.body.languageLevel,
 		};
-
-		if (req.file) {
-			body.profilePicture = `http://localhost:${process.env.PORT}/img/${req.file.filename}`;
-		}
 
 		const updatedUser = await User.findByIdAndUpdate(id, body, {
 			new: true,
@@ -172,6 +167,68 @@ export const updateCurrentUser = async (
 			status: 'success',
 			data: {
 				user: updatedUser,
+			},
+		});
+	} catch (e) {
+		next(e);
+	}
+};
+
+export const updateProfilePicture = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const file = req.file;
+		if (!file) {
+			return next(
+				new AppError('Not an image! Please upload only images', 400)
+			);
+		}
+		const user = await User.findByIdAndUpdate(
+			req.userId,
+			{
+				profilePicture: `http://localhost:${process.env.PORT}/img/${file.filename}`,
+			},
+			{
+				new: true,
+				runValidators: true,
+			}
+		);
+
+		res.status(200).json({
+			status: 'success',
+			data: {
+				user,
+			},
+		});
+	} catch (e) {
+		next(e);
+	}
+};
+
+export const deleteProfilePicture = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const user = await User.findByIdAndUpdate(
+			req.userId,
+			{
+				profilePicture: `http://localhost:${process.env.PORT}/img/default.jpg`,
+			},
+			{
+				new: true,
+				runValidators: true,
+			}
+		);
+
+		res.status(200).json({
+			status: 'success',
+			data: {
+				user,
 			},
 		});
 	} catch (e) {

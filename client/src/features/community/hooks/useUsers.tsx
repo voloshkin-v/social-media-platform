@@ -19,6 +19,7 @@ const useUsers = () => {
 		queryFn: ({ pageParam }) => getUsers({ pageParam, gender, languageLevel, country, minAge, maxAge, keyword }),
 		initialPageParam: 1,
 		getNextPageParam: (lastPage, allPages) => {
+			console.log(lastPage);
 			const morePagesExist = lastPage.length === 9;
 			if (!morePagesExist) return undefined;
 			return allPages.length + 1;

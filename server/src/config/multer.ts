@@ -21,7 +21,7 @@ const multerFilter = (
 	if (file.mimetype.startsWith('image')) {
 		cb(null, true);
 	} else {
-		cb(new AppError('Not an image! Please upload only images', 400));
+		cb(null, false);
 	}
 };
 const upload = multer({ storage, fileFilter: multerFilter });

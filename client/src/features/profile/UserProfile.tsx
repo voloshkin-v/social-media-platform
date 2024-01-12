@@ -4,6 +4,7 @@ import { Badge } from '@/components/ui/badge';
 import { getCountryData, languages } from 'countries-list';
 import UserProfilePicture from './UserProfilePicture';
 import UserMessageButton from './UserMessageButton';
+import ChangeImage from './ChangeImage';
 
 interface UserProfileProps {
 	user: IUser;
@@ -15,7 +16,12 @@ const UserProfile = ({ user, isMe = false, isMessagingAvailable }: UserProfilePr
 	return (
 		<div className="flex flex-col gap-10">
 			<div className="flex flex-wrap items-center gap-x-8 gap-y-5 md:flex-nowrap md:gap-20">
-				<UserProfilePicture profilePicture={user.profilePicture} />
+				<div className="max-w-44 space-y-5">
+					<UserProfilePicture profilePicture={user.profilePicture} />
+
+					{!isMe && isMessagingAvailable && <UserMessageButton />}
+					{isMe && <ChangeImage hasProfilePicture={!user.profilePicture.includes('default')} />}
+				</div>
 
 				<div className="flex flex-col gap-5">
 					<h1>{user.username}</h1>
@@ -61,8 +67,6 @@ const UserProfile = ({ user, isMe = false, isMessagingAvailable }: UserProfilePr
 					</ul>
 				</div>
 			</div>
-
-			{!isMe && isMessagingAvailable && <UserMessageButton username={user.username} />}
 
 			<div className="rounded-xl bg-secondary p-4 md:p-6">
 				<h2 className="mb-3">About me</h2>

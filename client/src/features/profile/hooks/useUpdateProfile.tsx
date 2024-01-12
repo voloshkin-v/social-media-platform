@@ -22,7 +22,7 @@ const useUpdateProfile = () => {
 			});
 		},
 		onError: (err) => {
-			let errMessage = 'Could nщt update your data';
+			let errMessage = 'Could not update your data';
 
 			if (err instanceof AxiosError) {
 				errMessage = err.response?.data.message;

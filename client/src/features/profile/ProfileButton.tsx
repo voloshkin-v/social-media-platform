@@ -25,7 +25,7 @@ const ProfileButton = () => {
 	const handleLogout = async () => {
 		try {
 			await logout();
-			queryClient.removeQueries({ queryKey: ['currentUser'] });
+			queryClient.removeQueries();
 			navigate('/login');
 		} catch (err) {
 			toast({

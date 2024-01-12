@@ -9,7 +9,12 @@ router.use(verifyToken);
 router
 	.route('/')
 	.get(userController.getUsers)
-	.patch(userController.uploadUserPhoto, userController.updateCurrentUser);
+	.patch(userController.updateCurrentUser);
+
+router
+	.route('/profilePicture')
+	.patch(userController.uploadUserPhoto, userController.updateProfilePicture)
+	.delete(userController.deleteProfilePicture);
 
 router.route('/currentUser').get(userController.getCurrentUser);
 router.route('/:id').get(userController.getUser);
