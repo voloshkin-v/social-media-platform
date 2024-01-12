@@ -12,7 +12,7 @@ export const getUsers = async (
 	next: NextFunction
 ) => {
 	try {
-		const { gender, country, languageLevel } = req.query;
+		const { gender, country, languageLevel, keyword } = req.query;
 		const minAge = Number(req.query.minAge);
 		const maxAge = Number(req.query.maxAge);
 
@@ -40,8 +40,20 @@ export const getUsers = async (
 			usersQuery.find({ age: { $lte: maxAge } });
 		}
 		if (maxAge && minAge) {
-			console.log(maxAge, minAge);
 			usersQuery.find({ age: { $gte: minAge, $lte: maxAge } });
+		}
+
+		if (keyword) {
+			usersQuery.find({
+				$or: [
+					{
+						interests: {
+							$in: [new RegExp(keyword as string, 'i')],
+						},
+					},
+					{ description: new RegExp(keyword as string, 'i') },
+				],
+			});
 		}
 
 		const page = Number(req.query.page) || 1;

@@ -4,15 +4,19 @@ import { useSearchParams } from 'react-router-dom';
 
 const useUsers = () => {
 	const [searchParams] = useSearchParams();
+
 	const gender = searchParams.get('gender');
 	const languageLevel = searchParams.get('languageLevel');
 	const country = searchParams.get('country');
 	const minAge = searchParams.get('minAge');
 	const maxAge = searchParams.get('maxAge');
+	const keyword = searchParams.get('keyword');
+
+	const queryKey = ['users', gender, languageLevel, country, minAge, maxAge, keyword].filter(Boolean);
 
 	return useInfiniteQuery({
-		queryKey: ['users', gender, languageLevel, country, minAge, maxAge],
-		queryFn: ({ pageParam }) => getUsers({ pageParam, gender, languageLevel, country, minAge, maxAge }),
+		queryKey,
+		queryFn: ({ pageParam }) => getUsers({ pageParam, gender, languageLevel, country, minAge, maxAge, keyword }),
 		initialPageParam: 1,
 		getNextPageParam: (lastPage, allPages) => {
 			const morePagesExist = lastPage.length === 9;

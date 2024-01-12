@@ -11,9 +11,18 @@ interface GetUsersProps {
 	country: string | null;
 	minAge: string | null;
 	maxAge: string | null;
+	keyword: string | null;
 }
 
-export const getUsers = async ({ pageParam, gender, languageLevel, country, minAge, maxAge }: GetUsersProps) => {
+export const getUsers = async ({
+	pageParam,
+	gender,
+	languageLevel,
+	country,
+	minAge,
+	maxAge,
+	keyword,
+}: GetUsersProps) => {
 	let query = `/users?page=${pageParam}`;
 
 	if (gender) {
@@ -34,6 +43,10 @@ export const getUsers = async ({ pageParam, gender, languageLevel, country, minA
 
 	if (maxAge) {
 		query = query + `&maxAge=${maxAge}`;
+	}
+
+	if (keyword) {
+		query = query + `&keyword=${keyword}`;
 	}
 
 	return apiAxiosPrivate.get<UsersResponse>(query).then((res) => res.data.data.users);
