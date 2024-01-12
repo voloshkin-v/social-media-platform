@@ -1,9 +1,9 @@
-import { calculateUserAge, getLevel } from '@/lib/utils';
+import { getLevel } from '@/lib/utils';
 import { IUser } from '@/types/user';
 import { Link } from 'react-router-dom';
 
 import { Badge } from '@/components/ui/badge';
-import { Avatar, AvatarImage } from '@/components/ui/avatar';
+import UserProfilePicture from '../profile/UserProfilePicture';
 
 interface UserProps {
 	user: IUser;
@@ -14,22 +14,20 @@ const User = ({ user }: UserProps) => {
 		<li>
 			<Link
 				to={`/profile/${user._id}`}
-				className="flex h-full gap-6 rounded-xl bg-secondary p-4 text-sm transition-transform hover:-translate-y-[2px] md:p-6"
+				className="flex h-full flex-col gap-6 rounded-xl bg-secondary p-4 text-sm transition-transform hover:-translate-y-[2px] min-[375px]:flex-row md:p-6"
 			>
-				<Avatar className="h-14 w-14">
-					<AvatarImage src={user.profilePicture} alt="profile picture" />
-				</Avatar>
+				<UserProfilePicture profilePicture={user.profilePicture} size="small" />
 
 				<div className="space-y-3">
 					<div className="flex flex-wrap items-center gap-3">
 						<span className="text-base">{user.username}</span>
-						{user.birthDate && <span>{calculateUserAge(user.birthDate)}</span>}
+						{user.age && <span>{user.age}</span>}
 						{user.country && <span className={`fi fi-${user.country.toLowerCase()}`}></span>}
 					</div>
 
 					<p>
 						{user.description && user.description.length > 30
-							? user.description.slice(1, 30) + '...'
+							? user.description.slice(0, 30) + '...'
 							: user.description}
 					</p>
 

@@ -1,6 +1,10 @@
 import { Request, Response, NextFunction } from 'express';
-import User from './user.model';
+import User, { IUser } from './user.model';
 import AppError from '../../utils/appError';
+import { UpdateQuery } from 'mongoose';
+import upload from '../../config/multer';
+
+export const uploadUserPhoto = upload.single('profilePicture');
 
 export const getUsers = async (
 	req: Request,
@@ -8,7 +12,9 @@ export const getUsers = async (
 	next: NextFunction
 ) => {
 	try {
-		const { gender, country } = req.query;
+		const { gender, country, languageLevel } = req.query;
+		const minAge = Number(req.query.minAge);
+		const maxAge = Number(req.query.maxAge);
 
 		const usersQuery = User.find({
 			_id: { $ne: req.userId },
@@ -16,11 +22,26 @@ export const getUsers = async (
 		}).sort({ createdAt: -1 });
 
 		if (gender) {
-			usersQuery.where('gender').equals(gender);
+			usersQuery.find({ gender });
+		}
+
+		if (languageLevel) {
+			usersQuery.find({ languageLevel: { $gte: languageLevel } });
 		}
 
 		if (country) {
-			usersQuery.where('country').equals(country);
+			usersQuery.where({ country });
+		}
+
+		if (minAge && !maxAge) {
+			usersQuery.find({ age: { $gte: minAge } });
+		}
+		if (maxAge && !minAge) {
+			usersQuery.find({ age: { $lte: maxAge } });
+		}
+		if (maxAge && minAge) {
+			console.log(maxAge, minAge);
+			usersQuery.find({ age: { $gte: minAge, $lte: maxAge } });
 		}
 
 		const page = Number(req.query.page) || 1;
@@ -92,34 +113,27 @@ export const updateCurrentUser = async (
 ) => {
 	try {
 		const id = req.userId;
-		const {
-			username,
-			description,
-			gender,
-			birthDate,
-			interests,
-			country,
-			nativeLanguage,
-			languageLevel,
-		} = req.body;
+		console.log(req.file);
 
-		const updatedUser = await User.findByIdAndUpdate(
-			id,
-			{
-				username,
-				description,
-				gender,
-				birthDate,
-				interests,
-				country,
-				nativeLanguage,
-				languageLevel,
-			},
-			{
-				new: true,
-				runValidators: true,
-			}
-		);
+		const body: UpdateQuery<IUser> = {
+			username: req.body.username,
+			description: req.body.description,
+			gender: req.body.gender,
+			birthDate: req.body.birthDate,
+			interests: req.body.interests,
+			country: req.body.country,
+			nativeLanguage: req.body.nativeLanguage,
+			languageLevel: req.body.languageLevel,
+		};
+
+		if (req.file) {
+			body.profilePicture = `http://localhost:${process.env.PORT}/img/${req.file.filename}`;
+		}
+
+		const updatedUser = await User.findByIdAndUpdate(id, body, {
+			new: true,
+			runValidators: true,
+		});
 
 		if (!updatedUser) {
 			return next(new AppError('User could not be updated', 400));

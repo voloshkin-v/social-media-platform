@@ -2,13 +2,11 @@ import { useToast } from '@/components/ui/use-toast';
 import { updateCurrentUser } from '@/services/users';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
-import { EditProfileValues } from '../Edit/EditProfileForm';
-import { useNavigate } from 'react-router-dom';
+import { EditProfileValues } from '../EditProfileForm';
 
 const useUpdateProfile = () => {
 	const queryClient = useQueryClient();
 	const { toast } = useToast();
-	const navigate = useNavigate();
 
 	return useMutation({
 		mutationFn: (values: EditProfileValues) => updateCurrentUser(values),

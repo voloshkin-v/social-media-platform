@@ -1,12 +1,13 @@
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
 import isEmail from 'validator/lib/isEmail';
+import dotenv from 'dotenv';
+import { dobToAge } from '../../utils';
+dotenv.config();
 
-export interface IUser {
-	_id: mongoose.Types.ObjectId;
-	isActivated: boolean;
-	username: string;
-}
+export type IUser = { _id: mongoose.Types.ObjectId } & mongoose.InferSchemaType<
+	typeof userSchema
+>;
 
 const userSchema = new mongoose.Schema(
 	{
@@ -16,6 +17,7 @@ const userSchema = new mongoose.Schema(
 			unique: true,
 			lowercase: true,
 			validate: isEmail,
+			select: false,
 		},
 		password: {
 			type: String,
@@ -42,9 +44,10 @@ const userSchema = new mongoose.Schema(
 		},
 		profilePicture: {
 			type: String,
-			default: 'https://github.com/shadcn.png',
+			default: `http://localhost:${process.env.PORT}/img/default.jpg`,
 		},
 		birthDate: Date,
+		age: Number,
 		gender: {
 			type: String,
 			enum: ['Male', 'Female'],
@@ -56,6 +59,17 @@ const userSchema = new mongoose.Schema(
 	},
 	{ timestamps: true }
 );
+
+userSchema.pre('save', function (next) {
+	if (!this.birthDate) {
+		return next();
+	}
+
+	const age = dobToAge(this.birthDate);
+	this.age = age;
+
+	next();
+});
 
 userSchema.pre('save', async function (next) {
 	if (!this.isModified('password')) {

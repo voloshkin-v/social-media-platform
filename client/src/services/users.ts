@@ -1,9 +1,42 @@
-import { EditProfileValues } from '@/features/profile/Edit/EditProfileForm';
+import { EditProfileValues } from '@/features/profile/EditProfileForm';
 import { apiAxiosPrivate } from '@/lib/axios';
 import { UserResponse, UsersResponse } from '@/types/responses';
 
-export const getUsers = async ({ pageParam }: { pageParam: number }) => {
-	return apiAxiosPrivate.get<UsersResponse>(`/users?page=${pageParam}`).then((res) => res.data.data.users);
+const wait = (ms: number) => new Promise((res) => setTimeout(res, ms));
+
+interface GetUsersProps {
+	pageParam: number;
+	gender: string | null;
+	languageLevel: string | null;
+	country: string | null;
+	minAge: string | null;
+	maxAge: string | null;
+}
+
+export const getUsers = async ({ pageParam, gender, languageLevel, country, minAge, maxAge }: GetUsersProps) => {
+	let query = `/users?page=${pageParam}`;
+
+	if (gender) {
+		query = query + `&gender=${gender}`;
+	}
+
+	if (languageLevel) {
+		query = query + `&languageLevel=${languageLevel}`;
+	}
+
+	if (country) {
+		query = query + `&country=${country}`;
+	}
+
+	if (minAge) {
+		query = query + `&minAge=${minAge}`;
+	}
+
+	if (maxAge) {
+		query = query + `&maxAge=${maxAge}`;
+	}
+
+	return apiAxiosPrivate.get<UsersResponse>(query).then((res) => res.data.data.users);
 };
 
 export const getUser = async (id: string) => {

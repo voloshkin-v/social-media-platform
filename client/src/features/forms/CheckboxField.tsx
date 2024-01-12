@@ -1,29 +1,33 @@
-import { interests } from '@/lib/constants/interests';
-import { EditProfileValues } from './EditProfileForm';
-import { UseFormReturn } from 'react-hook-form';
+import { UseFormReturn, FieldValues, Path } from 'react-hook-form';
 
-import { Checkbox } from '@/components/ui/checkbox';
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Checkbox } from '@/components/ui/checkbox';
 
-interface Props {
-	form: UseFormReturn<EditProfileValues>;
+interface Props<T extends FieldValues> {
+	name: Path<T>;
+	form: UseFormReturn<T>;
+	label?: string;
+	data: {
+		id: string;
+		label: string;
+	}[];
 }
 
-const InterestsField = ({ form }: Props) => {
+const CheckboxField = <T extends FieldValues>({ form, name, label, data }: Props<T>) => {
 	return (
 		<FormField
 			control={form.control}
-			name="interests"
+			name={name}
 			render={() => (
 				<FormItem>
-					<FormLabel>Interests</FormLabel>
+					{label && <FormLabel>{label}</FormLabel>}
 
 					<div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-4">
-						{interests.map((item) => (
+						{data.map((item) => (
 							<FormField
 								key={item.id}
 								control={form.control}
-								name="interests"
+								name={name}
 								render={({ field }) => {
 									return (
 										<FormItem
@@ -38,7 +42,7 @@ const InterestsField = ({ form }: Props) => {
 															? field.onChange([...field.value, item.label])
 															: field.onChange(
 																	field.value?.filter(
-																		(value) => value !== item.label,
+																		(value: string) => value !== item.label,
 																	),
 																);
 													}}
@@ -60,4 +64,4 @@ const InterestsField = ({ form }: Props) => {
 	);
 };
 
-export default InterestsField;
+export default CheckboxField;

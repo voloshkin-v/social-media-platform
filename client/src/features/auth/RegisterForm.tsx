@@ -8,12 +8,9 @@ import { register } from '@/services/auth';
 import { registerSchema } from '@/lib/schemas';
 
 import { Form } from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
 import AuthLink from './AuthLink';
 import FormSubmitButton from './FormSubmitButton';
 import InputField from '../forms/InputField';
-// import UsernameField from '../profile/Edit/UsernameField';
-// import InputField from '../profile/Edit/UsernameField';
 
 type RegisterValues = z.infer<typeof registerSchema>;
 

@@ -1,11 +1,9 @@
-import { calculateUserAge, getLevel } from '@/lib/utils';
+import { getLevel } from '@/lib/utils';
 import { IUser } from '@/types/user';
-
-import { Avatar, AvatarImage } from '@radix-ui/react-avatar';
 import { Badge } from '@/components/ui/badge';
 import { getCountryData, languages } from 'countries-list';
-
-import { Button } from '@/components/ui/button';
+import UserProfilePicture from './UserProfilePicture';
+import UserMessageButton from './UserMessageButton';
 
 interface UserProfileProps {
 	user: IUser;
@@ -17,16 +15,14 @@ const UserProfile = ({ user, isMe = false, isMessagingAvailable }: UserProfilePr
 	return (
 		<div className="flex flex-col gap-10">
 			<div className="flex flex-wrap items-center gap-x-8 gap-y-5 md:flex-nowrap md:gap-20">
-				<Avatar className="h-24 w-24 shrink-0 md:h-44 md:w-44">
-					<AvatarImage src={user.profilePicture} className="rounded-[50%]" />
-				</Avatar>
+				<UserProfilePicture profilePicture={user.profilePicture} />
 
 				<div className="flex flex-col gap-5">
 					<h1>{user.username}</h1>
 
 					<ul className="flex flex-wrap gap-5 md:gap-10">
 						<li className="flex flex-col">
-							<div>{user.birthDate ? calculateUserAge(user.birthDate) : 'Unknown'}</div>
+							<div>{user.age ? user.age : 'Unknown'}</div>
 							<span className="text-xs opacity-85">Age</span>
 						</li>
 
@@ -66,7 +62,7 @@ const UserProfile = ({ user, isMe = false, isMessagingAvailable }: UserProfilePr
 				</div>
 			</div>
 
-			{!isMe && isMessagingAvailable && <Button className="w-fit">Send message</Button>}
+			{!isMe && isMessagingAvailable && <UserMessageButton username={user.username} />}
 
 			<div className="rounded-xl bg-secondary p-4 md:p-6">
 				<h2 className="mb-3">About me</h2>

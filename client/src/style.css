@@ -76,6 +76,9 @@
 	html {
 		font-family: 'Poppins', sans-serif;
 	}
+	#root {
+		@apply flex min-h-[100dvh] flex-col;
+	}
 
 	/* Headings */
 	h1 {

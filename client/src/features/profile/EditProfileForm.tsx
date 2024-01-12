@@ -3,18 +3,17 @@ import { useForm } from 'react-hook-form';
 import { IUser } from '@/types/user';
 import { editProfileSchema } from '@/lib/schemas';
 import { z } from 'zod';
-import useUpdateProfile from '../hooks/useUpdateProfile';
+import useUpdateProfile from './hooks/useUpdateProfile';
+import { levels, countries, interests, languagesList } from '@/lib/constants';
 
 import { Form } from '@/components/ui/form';
-import FormSubmitButton from '../../auth/FormSubmitButton';
-// import UsernameField from './UsernameField';
-import DescriptionField from './DescriptionField';
-import BirthDateField from './BirthDateField';
-import GenderField from './GenderField';
-import CountryField from './CountryField';
-import InterestsField from './InterestsField';
-import NativeLanguageField from './NativeLanguageField';
-import LearningLanguagesField from './LanguageLevel';
+import FormSubmitButton from '../auth/FormSubmitButton';
+import InputField from '@/features/forms/InputField';
+import TextareaField from '@/features/forms/TextareaField';
+import SelectField from '@/features/forms/SelectField';
+import CheckboxField from '@/features/forms/CheckboxField';
+import RadioField from '@/features/forms/RadioField';
+import DateField from '@/features/forms/DateField';
 
 export type EditProfileValues = z.infer<typeof editProfileSchema>;
 
@@ -45,17 +44,19 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
 	return (
 		<Form {...form}>
 			<form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-				{/* <UsernameField form={form} label="Username" name="username" /> */}
-
-				{/* <UsernameField<EditProfileForm> form={form} label="LABEL" name="NAME" /> */}
-				<DescriptionField form={form} />
-				<BirthDateField form={form} />
-				<GenderField form={form} />
-				<CountryField form={form} />
-				<InterestsField form={form} />
-				<NativeLanguageField form={form} />
-				<LearningLanguagesField form={form} />
-
+				<InputField form={form} name="username" label="Username" />
+				<TextareaField form={form} name="description" label="About me" />
+				<DateField form={form} name="birthDate" label="Date of birth" />
+				<RadioField<EditProfileValues, EditProfileValues['gender']>
+					form={form}
+					name="gender"
+					label="Gender"
+					data={['Male', 'Female']}
+				/>
+				<SelectField form={form} name="country" label="Country of residence" data={countries} />
+				<CheckboxField form={form} name="interests" label="Interests" data={interests} />
+				<SelectField form={form} name="nativeLanguage" label="Native language" data={languagesList} />
+				<SelectField form={form} name="languageLevel" label="Select your level of English" data={levels} />
 				<div className="w-fit">
 					<FormSubmitButton isDisabled={!form.formState.isDirty} isSubmitting={isPending}>
 						Submit

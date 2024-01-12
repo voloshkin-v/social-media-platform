@@ -1,26 +1,27 @@
-import { UseFormReturn } from 'react-hook-form';
-import { EditProfileValues } from './EditProfileForm';
-import { CalendarIcon } from 'lucide-react';
+import { UseFormReturn, FieldValues, Path } from 'react-hook-form';
 import { cn } from '@/lib/utils';
 import { format } from 'date-fns';
+import { CalendarIcon } from 'lucide-react';
 
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Popover, PopoverTrigger, PopoverContent } from '@/components/ui/popover';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
 
-interface Props {
-	form: UseFormReturn<EditProfileValues>;
+interface Props<T extends FieldValues> {
+	name: Path<T>;
+	form: UseFormReturn<T>;
+	label?: string;
 }
 
-const BirthDateField = ({ form }: Props) => {
+const DateField = <T extends FieldValues>({ form, name, label }: Props<T>) => {
 	return (
 		<FormField
 			control={form.control}
-			name="birthDate"
+			name={name}
 			render={({ field }) => (
 				<FormItem className="flex flex-col">
-					<FormLabel>Date of birth</FormLabel>
+					{label && <FormLabel>Date of birth</FormLabel>}
 
 					<Popover>
 						<PopoverTrigger asChild>
@@ -52,4 +53,4 @@ const BirthDateField = ({ form }: Props) => {
 	);
 };
 
-export default BirthDateField;
+export default DateField;

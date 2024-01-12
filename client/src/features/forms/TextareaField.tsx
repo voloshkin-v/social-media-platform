@@ -1,21 +1,22 @@
-import { UseFormReturn } from 'react-hook-form';
-import { EditProfileValues } from './EditProfileForm';
+import { UseFormReturn, FieldValues, Path } from 'react-hook-form';
 
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Textarea } from '@/components/ui/textarea';
 
-interface Props {
-	form: UseFormReturn<EditProfileValues>;
+interface Props<T extends FieldValues> {
+	name: Path<T>;
+	form: UseFormReturn<T>;
+	label?: string;
 }
 
-const DescriptionField = ({ form }: Props) => {
+const TextareaField = <T extends FieldValues>({ form, name, label }: Props<T>) => {
 	return (
 		<FormField
 			control={form.control}
-			name="description"
+			name={name}
 			render={({ field }) => (
 				<FormItem>
-					<FormLabel>About me</FormLabel>
+					{label && <FormLabel>{label}</FormLabel>}
 
 					<FormControl>
 						<Textarea className="resize-none" {...field} />
@@ -28,4 +29,4 @@ const DescriptionField = ({ form }: Props) => {
 	);
 };
 
-export default DescriptionField;
+export default TextareaField;

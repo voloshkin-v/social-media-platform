@@ -1,4 +1,4 @@
-import EditProfileForm from '@/features/profile/Edit/EditProfileForm';
+import EditProfileForm from '@/features/profile/EditProfileForm';
 import useCurrentUser from '@/hooks/useCurrentUser';
 
 const Edit = () => {

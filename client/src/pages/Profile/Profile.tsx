@@ -3,7 +3,8 @@ import useUser from '@/features/profile/hooks/useUser';
 
 import UserProfile from '@/features/profile/UserProfile';
 import useCurrentUser from '@/hooks/useCurrentUser';
-import UserProfileSkeleton from '@/features/profile/UserProfileSkeleton';
+import Loader from '@/components/Loader';
+import InfoMessage from '@/components/InfoMessage';
 
 const Profile = () => {
 	const { id } = useParams();
@@ -11,11 +12,11 @@ const Profile = () => {
 	const { user: currentUser } = useCurrentUser();
 
 	if (isPending) {
-		return <UserProfileSkeleton isActivated={currentUser.isActivated} />;
+		return <Loader />;
 	}
 
 	if (isError) {
-		return <h1>User not found</h1>;
+		return <InfoMessage title="User not found" />;
 	}
 
 	return <UserProfile user={user} isMessagingAvailable={currentUser.isActivated} />;

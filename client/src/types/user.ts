@@ -6,7 +6,6 @@ type Gender = 'Male' | 'Female';
 
 export interface IUser {
 	_id: string;
-	email: string;
 	isActivated: boolean;
 	username: string;
 	profilePicture: string;
@@ -17,4 +16,5 @@ export interface IUser {
 	gender?: Gender;
 	birthDate?: string;
 	description?: string;
+	age?: number;
 }

@@ -56,33 +56,6 @@ const SignUpForm = () => {
 
 				<FormSubmitButton isSubmitting={isSubmitting}>Login</FormSubmitButton>
 				<AuthLinks title="Not registered yet?" to="/register" linkTitle="Register" />
-
-				{/* <FormField
-					control={form.control}
-					name="email"
-					render={({ field }) => (
-						<FormItem>
-							<FormControl>
-								<Input type="email" placeholder="Email" {...field} />
-							</FormControl>
-							<FormMessage />
-						</FormItem>
-					)}
-				/>
-
-				<FormField
-					control={form.control}
-					name="password"
-					render={({ field }) => (
-						<FormItem>
-							<FormControl>
-								<Input type="password" placeholder="Password" {...field} />
-							</FormControl>
-
-							<FormMessage />
-						</FormItem>
-					)}
-				/> */}
 			</form>
 		</Form>
 	);

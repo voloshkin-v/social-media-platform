@@ -1,23 +1,14 @@
-import { getUsers } from '@/services/users';
-import { useInfiniteQuery } from '@tanstack/react-query';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
 
 import Loader from '@/components/Loader';
 import User from './User';
+import useUsers from './hooks/useUsers';
+import InfoMessage from '@/components/InfoMessage';
 
 const UserList = () => {
 	const { ref, inView } = useInView();
-	const { data, isPending, isError, fetchNextPage, isFetchingNextPage, hasNextPage } = useInfiniteQuery({
-		queryKey: ['users'],
-		queryFn: getUsers,
-		initialPageParam: 1,
-		getNextPageParam: (lastPage, allPages) => {
-			const morePagesExist = lastPage.length === 9;
-			if (!morePagesExist) return undefined;
-			return allPages.length + 1;
-		},
-	});
+	const { data, isPending, isError, fetchNextPage, isFetchingNextPage, hasNextPage } = useUsers();
 
 	useEffect(() => {
 		if (inView && hasNextPage) {
@@ -33,9 +24,13 @@ const UserList = () => {
 		return <p>ERROR</p>;
 	}
 
+	if (!data.pages[0].length) {
+		return <InfoMessage title="Nobody was found 😔" description="Try changing the filters" />;
+	}
+
 	return (
 		<div>
-			<ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+			<ul className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
 				{data.pages.map((users) => users.map((user) => <User key={user._id} user={user} />))}
 			</ul>
 			<span className="absolute opacity-0" ref={ref}></span>

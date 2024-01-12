@@ -1,20 +1,9 @@
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import { ACCEPTED_IMAGE_MIME_TYPES } from './constants';
 
 export const cn = (...inputs: ClassValue[]) => {
 	return twMerge(clsx(inputs));
-};
-
-export const calculateUserAge = (date: string) => {
-	const today = new Date();
-	const birthDate = new Date(date);
-	let age = today.getFullYear() - birthDate.getFullYear();
-	const m = today.getMonth() - birthDate.getMonth();
-	if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-		age--;
-	}
-
-	return age;
 };
 
 export const getLevel = (level: number) => {
@@ -34,4 +23,17 @@ export const getLevel = (level: number) => {
 		default:
 			return null;
 	}
+};
+
+export const getImageData = (event: React.ChangeEvent<HTMLInputElement>) => {
+	// FileList is immutable, so we need to create a new one
+	const dataTransfer = new DataTransfer();
+
+	// Add newly uploaded images
+	Array.from(event.target.files!).forEach((image) => dataTransfer.items.add(image));
+
+	const files = dataTransfer.files;
+	const displayUrl = URL.createObjectURL(event.target.files![0]);
+
+	return { files, displayUrl };
 };
