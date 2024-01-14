@@ -5,6 +5,7 @@ import cors from 'cors';
 
 import authRouter from './api/auth/auth.router';
 import userRouter from './api/users/user.router';
+import messageRouter from './api/messages/message.router';
 import * as middlewares from './middleware/globalErrorHandler';
 
 dotenv.config();
@@ -23,6 +24,7 @@ app.use(express.static('public'));
 
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/users', userRouter);
+app.use('/api/v1/messages', messageRouter);
 
 app.use(middlewares.notFound);
 app.use(middlewares.errorHandler);

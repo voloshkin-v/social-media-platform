@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from 'express';
+import mongoose, { PipelineStage, UpdateQuery } from 'mongoose';
 import User, { IUser } from './user.model';
 import AppError from '../../utils/appError';
-import { UpdateQuery } from 'mongoose';
 import upload from '../../config/multer';
 
 export const uploadUserPhoto = upload.single('profilePicture');
@@ -16,53 +16,112 @@ export const getUsers = async (
 		const minAge = Number(req.query.minAge);
 		const maxAge = Number(req.query.maxAge);
 
-		const usersQuery = User.find({
-			_id: { $ne: req.userId },
-			isActivated: true,
-		}).sort({ createdAt: -1 });
+		const options: PipelineStage[] = [
+			{
+				$match: {
+					_id: {
+						$ne: new mongoose.Types.ObjectId(req.userId),
+					},
+					isActivated: true,
+				},
+			},
+			{
+				$sort: {
+					createdAt: -1,
+				},
+			},
+		];
 
-		if (gender) {
-			usersQuery.find({ gender });
-		}
-
-		if (languageLevel) {
-			usersQuery.find({ languageLevel: { $gte: languageLevel } });
-		}
-
-		if (country) {
-			usersQuery.where({ country });
-		}
-
-		if (minAge && !maxAge) {
-			usersQuery.find({ age: { $gte: minAge } });
-		}
-		if (maxAge && !minAge) {
-			usersQuery.find({ age: { $lte: maxAge } });
-		}
-		if (maxAge && minAge) {
-			usersQuery.find({ age: { $gte: minAge, $lte: maxAge } });
-		}
-
-		if (keyword) {
-			usersQuery.find({
-				$or: [
-					{
-						interests: {
-							$in: [new RegExp(keyword as string, 'i')],
+		if (req.isActivated) {
+			options.push({
+				$addFields: {
+					matches: {
+						$size: {
+							$setIntersection: [
+								'$interests',
+								req.user.interests,
+							],
 						},
 					},
-					{ description: new RegExp(keyword as string, 'i') },
-				],
+				},
+			});
+
+			options.push({
+				$sort: { matches: -1, createdAt: -1 },
 			});
 		}
 
+		// Sorting
+		// options.push({
+		// 	$sort: req.isActivated
+		// 		? { matches: -1, createdAt: -1 }
+		// 		: { createdAt: -1 },
+		// });
+
+		if (gender) {
+			options.push({
+				$match: {
+					gender,
+				},
+			});
+		}
+
+		if (languageLevel) {
+			options.push({
+				$match: {
+					languageLevel: { $gte: +languageLevel },
+				},
+			});
+		}
+
+		if (country) {
+			options.push({
+				$match: {
+					country,
+				},
+			});
+		}
+
+		// Age
+		if (minAge && !maxAge) {
+			options.push({
+				$match: { age: { $gte: minAge } },
+			});
+		}
+		if (maxAge && !minAge) {
+			options.push({
+				$match: { age: { $lte: maxAge } },
+			});
+		}
+		if (maxAge && minAge) {
+			options.push({
+				$match: { age: { $gte: minAge, $lte: maxAge } },
+			});
+		}
+
+		if (keyword) {
+			options.push({
+				$match: {
+					$or: [
+						{
+							interests: {
+								$in: [new RegExp(keyword as string, 'i')],
+							},
+						},
+						{ description: new RegExp(keyword as string, 'i') },
+					],
+				},
+			});
+		}
+
+		// Pagination
 		const page = Number(req.query.page) || 1;
 		const limit = Number(req.query.limit) || 9;
 		const skip = (page - 1) * limit;
+		options.push({ $skip: skip }, { $limit: limit });
 
-		usersQuery.skip(skip).limit(limit);
-
-		const users = await usersQuery;
+		console.log(JSON.stringify(options, null, 2));
+		const users = await User.aggregate(options);
 
 		res.status(200).json({
 			status: 'success',
@@ -71,6 +130,62 @@ export const getUsers = async (
 				users,
 			},
 		});
+
+		// const usersQuery = User.find({
+		// 	_id: { $ne: req.userId },
+		// 	isActivated: true,
+		// }).sort({ createdAt: -1 });
+
+		// if (gender) {
+		// 	usersQuery.find({ gender });
+		// }
+
+		// if (languageLevel) {
+		// 	usersQuery.find({ languageLevel: { $gte: languageLevel } });
+		// }
+
+		// if (country) {
+		// 	usersQuery.where({ country });
+		// }
+
+		// if (minAge && !maxAge) {
+		// 	usersQuery.find({ age: { $gte: minAge } });
+		// }
+		// if (maxAge && !minAge) {
+		// 	usersQuery.find({ age: { $lte: maxAge } });
+		// }
+		// if (maxAge && minAge) {
+		// 	usersQuery.find({ age: { $gte: minAge, $lte: maxAge } });
+		// }
+
+		// if (keyword) {
+		// 	usersQuery.find({
+		// 		$or: [
+		// 			{
+		// 				interests: {
+		// 					$in: [new RegExp(keyword as string, 'i')],
+		// 				},
+		// 			},
+		// 			{ description: new RegExp(keyword as string, 'i') },
+		// 		],
+		// 	});
+		// }
+
+		// const page = Number(req.query.page) || 1;
+		// const limit = Number(req.query.limit) || 9;
+		// const skip = (page - 1) * limit;
+
+		// usersQuery.skip(skip).limit(limit);
+
+		// const users = await usersQuery;
+
+		// res.status(200).json({
+		// 	status: 'success',
+		// 	results: users.length,
+		// 	data: {
+		// 		users,
+		// 	},
+		// });
 	} catch (e) {
 		next(e);
 	}
@@ -82,7 +197,9 @@ export const getUser = async (
 	next: NextFunction
 ) => {
 	try {
-		const user = await User.findById(req.params.id);
+		const user = await User.findOne({
+			$and: [{ _id: { $ne: req.userId } }, { _id: req.params.id }],
+		});
 
 		if (!user) {
 			return next(new AppError('No user found with that ID', 404));

@@ -32,8 +32,9 @@ export const verifyToken = async (
 			);
 		}
 
-		req.userId = userData.userId;
-		req.isActivated = userData.isActivated;
+		req.userId = currentUser.id;
+		req.isActivated = currentUser.isActivated;
+		req.user = currentUser;
 
 		next();
 	} catch (err) {

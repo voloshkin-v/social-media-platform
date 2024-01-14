@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useToast } from '@/components/ui/use-toast';
 import { logout } from '@/services/auth';
 import useCurrentUser from '@/hooks/useCurrentUser';
+import { useQueryClient } from '@tanstack/react-query';
 
 import {
 	DropdownMenu,
@@ -14,7 +15,6 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { Button } from '@/components/ui/button';
-import { useQueryClient } from '@tanstack/react-query';
 
 const ProfileButton = () => {
 	const { toast } = useToast();

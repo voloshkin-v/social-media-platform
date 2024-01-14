@@ -1,25 +1,29 @@
 import { getLevel } from '@/lib/utils';
 import { IUser } from '@/types/user';
-import { Badge } from '@/components/ui/badge';
 import { getCountryData, languages } from 'countries-list';
-import UserProfilePicture from './UserProfilePicture';
-import UserMessageButton from './UserMessageButton';
+import useCurrentUser from '@/hooks/useCurrentUser';
+
+import { Badge } from '@/components/ui/badge';
+import UserMessageButton from '../messaging/UserMessageButton';
 import ChangeImage from './ChangeImage';
+import UserProfilePicture from './UserProfilePicture';
 
 interface UserProfileProps {
 	user: IUser;
 	isMessagingAvailable?: boolean;
-	isMe?: boolean;
 }
 
-const UserProfile = ({ user, isMe = false, isMessagingAvailable }: UserProfileProps) => {
+const UserProfile = ({ user, isMessagingAvailable }: UserProfileProps) => {
+	const { user: currentUser } = useCurrentUser();
+	const isMe = currentUser._id === user._id;
+
 	return (
 		<div className="flex flex-col gap-10">
 			<div className="flex flex-wrap items-center gap-x-8 gap-y-5 md:flex-nowrap md:gap-20">
 				<div className="max-w-44 space-y-5">
 					<UserProfilePicture profilePicture={user.profilePicture} />
 
-					{!isMe && isMessagingAvailable && <UserMessageButton />}
+					{!isMe && isMessagingAvailable && <UserMessageButton _id={user._id} />}
 					{isMe && <ChangeImage hasProfilePicture={!user.profilePicture.includes('default')} />}
 				</div>
 

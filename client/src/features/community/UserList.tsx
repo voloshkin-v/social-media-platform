@@ -21,7 +21,7 @@ const UserList = () => {
 	}
 
 	if (isError) {
-		return <p>ERROR</p>;
+		return <InfoMessage title="Something went wrong" />;
 	}
 
 	if (!data.pages[0].length) {

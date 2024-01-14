@@ -5,7 +5,7 @@ interface InfoMessageProps {
 
 const InfoMessage = ({ title, description = '' }: InfoMessageProps) => {
 	return (
-		<div className="flex flex-col items-center gap-2">
+		<div className="flex flex-col gap-2">
 			<h2>{title}</h2>
 			{description && <p>{description}</p>}
 		</div>

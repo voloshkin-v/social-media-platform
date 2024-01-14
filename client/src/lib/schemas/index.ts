@@ -55,15 +55,6 @@ export const editProfileSchema = z.object({
 		required_error: 'Please fill in this field ',
 	}),
 	languageLevel,
-	// profilePicture: z.any().refine((files) => {
-	// 	console.log('FILES', files);
-
-	// 	if (files?.length === 0) {
-	// 		return true;
-	// 	}
-
-	// 	return ACCEPTED_IMAGE_MIME_TYPES.includes(files?.[0]?.type);
-	// }, 'Only .jpg, .jpeg and .png formats are supported.'),
 });
 
 export const filterSchema = z.object({
@@ -74,5 +65,5 @@ export const filterSchema = z.object({
 });
 
 export const messageSchema = z.object({
-	message: z.string().min(10),
+	message: z.string().min(10, 'The message must be at least 10 characters'),
 });

@@ -57,6 +57,7 @@ const EditProfileForm = ({ user }: EditProfileFormProps) => {
 				<CheckboxField form={form} name="interests" label="Interests" data={interests} />
 				<SelectField form={form} name="nativeLanguage" label="Native language" data={languagesList} />
 				<SelectField form={form} name="languageLevel" label="Select your level of English" data={levels} />
+
 				<div className="w-fit">
 					<FormSubmitButton isDisabled={!form.formState.isDirty} isSubmitting={isPending}>
 						Submit

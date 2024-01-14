@@ -3,11 +3,23 @@ import { Skeleton } from '@/components/ui/skeleton';
 
 interface Props {
 	profilePicture: string;
-	size?: 'default' | 'small';
+	size?: 'default' | 'small' | 'mini';
 }
 
 const UserProfilePicture = ({ profilePicture, size = 'default' }: Props) => {
-	const classNames = size === 'default' ? 'h-24 w-24 shrink-0 md:h-44 md:w-44' : 'h-12 w-12 md:h-20 md:w-20';
+	let classNames = '';
+
+	switch (size) {
+		case 'default':
+			classNames = 'h-24 w-24 shrink-0 md:h-44 md:w-44';
+			break;
+		case 'small':
+			classNames = 'h-12 w-12 md:h-20 md:w-20';
+			break;
+		case 'mini':
+			classNames = 'h-12 w-12';
+			break;
+	}
 
 	return (
 		<Avatar className={classNames}>

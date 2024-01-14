@@ -1,18 +1,41 @@
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
+import MessagingList from '@/features/messaging/MessagingList';
+import useMessages from '@/features/messaging/hooks/useMessages';
+
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import Loader from '@/components/Loader';
+import InfoMessage from '@/components/InfoMessage';
 
 const Messaging = () => {
-	return (
-		<div className="flex h-full flex-1">
-			<div className="w-1/3">mess</div>
+	const { data: receivedMessages, isPending: isPendingReceived, isError: isErrorReceived } = useMessages();
+	const { data: sentMessages, isPending: isPendingSent, isError: isErrorSent } = useMessages('sent');
 
-			<div className="2/3">
-				<div className="flex gap-5">
-					<Input />
-					<Button>Send</Button>
-				</div>
+	if (isPendingReceived || isPendingSent) {
+		return <Loader />;
+	}
+
+	if (isErrorReceived || isErrorSent) {
+		return <InfoMessage title="Something went wrong" />;
+	}
+
+	return (
+		<Tabs defaultValue="received">
+			<div className="mb-10 flex flex-wrap justify-between">
+				<h1>Box</h1>
+
+				<TabsList>
+					<TabsTrigger value="received">Received</TabsTrigger>
+					<TabsTrigger value="sent">Sent</TabsTrigger>
+				</TabsList>
 			</div>
-		</div>
+
+			<TabsContent value="received">
+				<MessagingList messages={receivedMessages.data.messages} status={receivedMessages.messagesStatus} />
+			</TabsContent>
+
+			<TabsContent value="sent">
+				<MessagingList messages={sentMessages.data.messages} status={sentMessages.messagesStatus} />
+			</TabsContent>
+		</Tabs>
 	);
 };
 

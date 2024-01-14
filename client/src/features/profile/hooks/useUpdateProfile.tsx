@@ -13,8 +13,8 @@ const useUpdateProfile = () => {
 		onSuccess: () => {
 			queryClient.invalidateQueries({
 				queryKey: ['currentUser'],
-				exact: true,
 			});
+			queryClient.invalidateQueries({ queryKey: ['todos'] });
 
 			toast({
 				title: 'Profile has been successfully updated.',

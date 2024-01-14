@@ -33,7 +33,6 @@ const Filters = () => {
 
 	const onSubmit = (values: FilterValues) => {
 		const { gender, languageLevel, country, age } = values;
-		console.log(values);
 
 		if (gender) {
 			searchParams.set('gender', gender);
@@ -125,7 +124,7 @@ const Filters = () => {
 							)}
 						/>
 
-						<DialogFooter className="gap-2">
+						<DialogFooter className="gap-4">
 							<Button variant="secondary" type="reset" onClick={handleReset}>
 								Reset
 							</Button>

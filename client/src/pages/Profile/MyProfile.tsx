@@ -9,7 +9,7 @@ const MyProfile = () => {
 		return <Navigate to="/profile/edit" />;
 	}
 
-	return <UserProfile user={user} isMe={true} />;
+	return <UserProfile user={user} />;
 };
 
 export default MyProfile;

@@ -53,6 +53,8 @@ export const errorHandler = (
 		}
 	}
 
+	console.log(err);
+
 	res.status(500).json({
 		status: 'error',
 		message: 'An unknown error occurred',

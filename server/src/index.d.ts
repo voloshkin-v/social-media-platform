@@ -1,3 +1,5 @@
+import { IUser } from './api/users/user.model';
+
 export {};
 
 declare global {
@@ -5,6 +7,7 @@ declare global {
 		export interface Request {
 			isActivated: boolean;
 			userId: string;
+			user: IUser;
 		}
 	}
 }

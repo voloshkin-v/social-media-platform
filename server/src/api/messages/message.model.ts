@@ -2,10 +2,9 @@ import mongoose, { Schema } from 'mongoose';
 
 const messageSchema = new Schema(
 	{
-		fromUserId: { type: Schema.Types.ObjectId, ref: 'User' },
-		toUserId: { type: Schema.Types.ObjectId, ref: 'User' },
-		message: { type: String, min: 10 },
-		viewed: { type: Boolean, default: false },
+		sender: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+		recipient: { type: Schema.Types.ObjectId, ref: 'User', required: true },
+		message: { type: String, minLength: 10, required: true },
 	},
 	{ timestamps: true }
 );
