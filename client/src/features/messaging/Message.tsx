@@ -9,7 +9,6 @@ interface MessageProps {
 }
 
 const Message = ({ message, onMessageSelect, isSelected, status }: MessageProps) => {
-	console.log(status);
 	return (
 		<button
 			onClick={() => onMessageSelect(message)}

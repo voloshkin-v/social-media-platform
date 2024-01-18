@@ -19,7 +19,7 @@ const AppLayout = () => {
 						<Info className="h-4 w-4" />
 						<AlertTitle>Hey, {user.username} 👋</AlertTitle>
 						<AlertDescription>
-							To unlock all features, please activate your account. As soon as you fill in all data your
+							To unlock all features, please activate your account. As soon as you fill in all data, your
 							account will be activated 🌟
 							<Button className="mt-4 block w-fit underline hover:no-underline" variant="link" asChild>
 								<Link to="/profile/edit">Activate</Link>

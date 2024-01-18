@@ -30,9 +30,20 @@ const MessagePreviewReceived = ({ message }: { message: IMessage }) => {
 
 const MessagePreviewSent = ({ message }: { message: IMessage }) => {
 	return (
-		<div className="p-4 text-sm">
-			<p>{message.message}</p>
-		</div>
+		<>
+			<div className="border-b p-4">
+				<Link to={`/profile/${message.recipient._id}`} className="flex items-center gap-4">
+					{message.recipient.profilePicture && (
+						<UserProfilePicture size="mini" profilePicture={message.recipient.profilePicture} />
+					)}
+					<h3 className="text-sm">{message.recipient.username}</h3>
+				</Link>
+			</div>
+
+			<div className="p-4 text-sm">
+				<p>{message.message}</p>
+			</div>
+		</>
 	);
 };
 

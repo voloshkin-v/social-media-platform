@@ -33,14 +33,14 @@ const ChangeImage = ({ hasProfilePicture }: { hasProfilePicture: boolean }) => {
 			<Input
 				disabled={isPending}
 				onChange={handleChange}
-				className="cursor-pointer file:text-foreground"
+				className="mx-auto w-fit cursor-pointer text-[0px] file:text-foreground"
 				type="file"
 			/>
 		</>
 	) : (
 		<div className="flex flex-col gap-4">
 			<AlertDialog>
-				<AlertDialogTrigger asChild>
+				<AlertDialogTrigger asChild className="mx-auto w-fit">
 					<Button variant="outline">Remove</Button>
 				</AlertDialogTrigger>
 

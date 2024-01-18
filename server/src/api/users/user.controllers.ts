@@ -120,7 +120,6 @@ export const getUsers = async (
 		const skip = (page - 1) * limit;
 		options.push({ $skip: skip }, { $limit: limit });
 
-		console.log(JSON.stringify(options, null, 2));
 		const users = await User.aggregate(options);
 
 		res.status(200).json({

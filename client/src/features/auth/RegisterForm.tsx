@@ -20,8 +20,8 @@ const RegisterForm = () => {
 		defaultValues: {
 			email: '',
 			username: '',
-			password: '123123123',
-			confirmPassword: '123123123',
+			password: '',
+			confirmPassword: '',
 		},
 	});
 
@@ -59,7 +59,7 @@ const RegisterForm = () => {
 				<InputField form={form} name="confirmPassword" placeholder="Confirm password" type="password" />
 
 				<FormSubmitButton isSubmitting={isSubmitting}>Create an account</FormSubmitButton>
-				<AuthLink title="Already have an accout?" to="/login" linkTitle="Login" />
+				<AuthLink title="Already have an account?" to="/login" linkTitle="Login" />
 			</form>
 		</Form>
 	);

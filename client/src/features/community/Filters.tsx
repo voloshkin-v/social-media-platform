@@ -95,8 +95,13 @@ const Filters = () => {
 							label="Select gender"
 						/>
 
-						<SelectField form={form} name="languageLevel" label="Select minimum level" data={levels} />
-						<SelectField form={form} name="country" label="Select country" data={countries} />
+						<SelectField
+							form={form}
+							name="languageLevel"
+							label="Select minimum level of English"
+							data={levels}
+						/>
+						<SelectField form={form} name="country" label="Select country" data={countries} />ц
 
 						<FormField
 							control={form.control}
