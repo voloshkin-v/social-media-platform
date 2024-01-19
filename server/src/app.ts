@@ -16,8 +16,7 @@ const app = express();
 app.use(compression());
 app.use(
     cors({
-        // origin: process.env.CLIENT_URL,
-        origin: ['http://localhost:4173', process.env.CLIENT_URL!],
+        origin: [process.env.CLIENT_URL!, process.env.CLIENT_URL_PREVIEW!],
         credentials: true,
     })
 );

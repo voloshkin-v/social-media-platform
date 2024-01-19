@@ -2,7 +2,8 @@ import { refresh } from '@/services/auth';
 import axios, { AxiosError } from 'axios';
 import createAuthRefreshInterceptor from 'axios-auth-refresh';
 
-export const baseURL = 'http://localhost:3000/api/v1';
+// export const baseURL = 'http://localhost:3000/api/v1';
+export const baseURL = 'https://use-speak-api.vercel.app/api/v1';
 
 export const apiAxios = axios.create({
 	baseURL,
