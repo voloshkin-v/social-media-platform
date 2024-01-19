@@ -2,8 +2,6 @@ import { EditProfileValues } from '@/features/profile/EditProfileForm';
 import { apiAxiosPrivate } from '@/lib/axios';
 import { UserResponse, UsersResponse } from '@/types/responses';
 
-const wait = (ms: number) => new Promise((res) => setTimeout(res, ms));
-
 interface GetUsersProps {
 	pageParam: number;
 	gender: string | null;
