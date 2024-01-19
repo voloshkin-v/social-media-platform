@@ -16,7 +16,7 @@ const app = express();
 app.use(compression());
 app.use(
     cors({
-        origin: [process.env.CLIENT_URL!, process.env.CLIENT_URL_PREVIEW!],
+        origin: [process.env.CLIENT_URL!, process.env.CLIENT_URL_PREVIEW!, process.env.CLIENT_URL_PROD!],
         credentials: true,
     })
 );
