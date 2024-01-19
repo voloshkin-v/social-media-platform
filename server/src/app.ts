@@ -12,7 +12,7 @@ dotenv.config();
 
 const app = express();
 
-app.enable('trust proxy');
+console.log(process.env.CLIENT_URL!, process.env.CLIENT_URL_PROD!);
 
 app.use(
     cors({
