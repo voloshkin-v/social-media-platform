@@ -21,7 +21,7 @@ const refreshAuth = async () => {
 		return Promise.resolve();
 	} catch (err) {
 		if (err instanceof AxiosError && err.response?.status === 401) {
-			window.location.href = '/login';
+			// window.location.href = '/login';
 		}
 
 		return Promise.reject();
